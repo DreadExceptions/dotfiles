@@ -1,0 +1,8 @@
+[user]
+	email = alluminio.lorenzo@gmail.com
+	name = Lorenzo Alluminio
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
