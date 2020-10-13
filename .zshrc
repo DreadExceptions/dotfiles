@@ -103,7 +103,7 @@ source /usr/local/bin/virtualenvwrapper.sh
 # For a full list of active aliases, run `alias`.
 #
 # PATH
-export PATH=$PATH:/home/ulla/.local/bin
+export PATH=$PATH:/home/ulla/.local/bin:/home/ulla/BattleScribe_2.03.21:/home/ulla/Apps
 # ALIASES
 alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
@@ -118,6 +118,7 @@ alias ida="/home/ulla/idafree-7.0/ida64"
 alias hg="history | grep"
 alias monero="/home/ulla/monero-gui-v0.16.0.2/monero-wallet-gui"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias untar='tar -zxvf'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
