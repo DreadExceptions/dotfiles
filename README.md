@@ -33,7 +33,8 @@ Now you can use regular git commands such as:
     dotfiles push
 
 Nice, right? Now if you're moving to a virgin system…
-Setup environment in a new computer
+
+### Setup environment in a new computer
 
 Make sure to have git installed, then:
 clone your github repository
