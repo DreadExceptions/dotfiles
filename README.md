@@ -9,7 +9,7 @@ If you're starting from scratch, go ahead and… create a .dotfiles folder, whic
 
     git init --bare $HOME/.dotfiles
 
-create an alias dotfilesso you don't need to type it all over again
+create an alias dotfiles so you don't need to type it all over again
 
     alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
