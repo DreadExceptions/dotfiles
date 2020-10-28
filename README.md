@@ -1,7 +1,7 @@
 # dotfiles
 my configuration files
 
-take from https://medium.com/toutsbrasil/how-to-manage-your-dotfiles-with-git-f7aeed8adf8b
+taken from https://medium.com/toutsbrasil/how-to-manage-your-dotfiles-with-git-f7aeed8adf8b
 
 ## Getting started
 
