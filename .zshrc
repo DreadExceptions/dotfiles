@@ -107,7 +107,8 @@ export NVM_DIR="$HOME/.nvm"
 # For a full list of active aliases, run `alias`.
 #
 # PATH
-export PATH=$PATH:/home/ulla/.local/bin:/home/ulla/BattleScribe_2.03.21:/home/ulla/Apps
+export GEM_HOME=~/.ruby/
+export PATH=$PATH:/home/ulla/.local/bin:/home/ulla/BattleScribe_2.03.21:/home/ulla/Apps:~/.ruby/bin
 # ALIASES
 alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh && source ~/.oh-my-zsh"
