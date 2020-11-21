@@ -130,6 +130,7 @@ alias ..3="cd ../../.."
 alias ..4="cd ../../../.."
 alias ..5="cd ../../../../.."
 alias c="clear"
+alias ta="tmux a -t"
 cs() { cd "$1" && ls; }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
