@@ -10,3 +10,5 @@
 	last = log -1 HEAD
 	lo = log --oneline
 	cm = commit -m
+[core]
+	editor = vim
