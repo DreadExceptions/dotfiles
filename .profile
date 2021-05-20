@@ -26,3 +26,4 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 . "$HOME/.cargo/env"
+export PATH="/home/ulla/.local/share/solana/install/active_release/bin:$PATH"
