@@ -57,3 +57,7 @@ cs() { cd "$1" && ls; }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# show neofetch prompt
+POWERLEVEL9K_INSTANT_PROMPT=quiet
+neofetch --cpu_temp C --memory_percent on
