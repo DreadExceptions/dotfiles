@@ -71,6 +71,8 @@ sudo apt install ./mindforger_1.52.0-1_amd64.deb
 rm ./mindforger_1.52.0-1_amd64.deb
 ```
 
+Actually get the dotfiles:
+
 ```
 git clone --bare https://github.com/LorenzoAlluminio/dotfiles.git $HOME/.dotfiles
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
