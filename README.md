@@ -56,6 +56,8 @@ sudo apt install python2
 wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
 python2 get-pip.py
 sudo pip3 install virtualenv virtualenvwrapper
+pip3 install ipython ipdb
+python2 -m pip install ipython
 ```
 
 Sometimes the config of pyenv in the `.profile` file needs some tweaking. Also the source virtualenvwrapper.sh.
