@@ -22,7 +22,7 @@ dotfiles commit -m "Add bashrc"
 dotfiles push
 ```
 
-### Setup environment in a new computer
+## Setup environment in a new computer
 
 ```
 git clone --bare https://github.com/USERNAME/dotfiles.git $HOME/.dotfiles
