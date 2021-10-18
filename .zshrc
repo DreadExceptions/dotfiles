@@ -28,7 +28,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # environment variables
-export PATH=$PATH:/home/ulla/.local/bin:/home/ulla/Apps
+export PATH=$PATH:$HOME/.local/bin:$HOME/Apps
 
 # aliases
 alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
@@ -37,10 +37,10 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl='ls'
-alias ghidra='/home/ulla/ghidra_9.2.2_PUBLIC/ghidraRun'
-alias battlescribe="/home/ulla/BattleScribe_2.03.21/RosterEditor.sh"
+alias ghidra="$HOME/ghidra_9.2.2_PUBLIC/ghidraRun"
+alias battlescribe="$HOME/BattleScribe_2.03.21/RosterEditor.sh"
 alias disableaslr="setarch x86_64 -R /bin/bash"
-alias ida="/home/ulla/idafree-7.0/ida64"
+alias ida="$HOME/idafree-7.0/ida64"
 alias hg="history | grep"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias untar='tar -zxvf'
