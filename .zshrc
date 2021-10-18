@@ -20,6 +20,7 @@ HIST_STAMPS="dd.mm.yyyy"
 plugins=(git zsh-autosuggestions pyenv)
 
 source $ZSH/oh-my-zsh.sh
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
 
 # nvm 
