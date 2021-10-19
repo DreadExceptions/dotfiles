@@ -73,6 +73,8 @@ python2 -m pip install ipython
 sudo add-apt-repository ppa:hluk/copyq
 sudo apt update
 sudo apt install copyq
+sudo apt install tlp
+sudo tlp start
 ```
 
 Actually get the dotfiles:
@@ -93,3 +95,4 @@ Other things to do:
 	- autostart
 	- avoid storing keepassxc passwords (https://superuser.com/questions/1112970/prevent-copyq-clipboard-manager-from-keeping-data-from-keepass)
 - open vim to install plugins
+- enable hibernate if possible
