@@ -1,6 +1,7 @@
 # dotfiles
 
-my configuration files, taken from https://medium.com/toutsbrasil/how-to-manage-your-dotfiles-with-git-f7aeed8adf8b
+my configuration files and procedures on how to setup my env on a clean ubuntu installation.
+Inspiration from https://medium.com/toutsbrasil/how-to-manage-your-dotfiles-with-git-f7aeed8adf8b.
 
 # prerequisites
 
@@ -52,13 +53,6 @@ libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
 libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl \
 git
 git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-sudo apt install python3-pip
-sudo apt install python2
-wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-python2 get-pip.py
-sudo pip3 install virtualenv virtualenvwrapper
-pip3 install ipython ipdb
-python2 -m pip install ipython
 ```
 
 Sometimes the config of pyenv in the `.profile` file needs some tweaking. Also the source virtualenvwrapper.sh.
@@ -69,6 +63,16 @@ sudo apt install keepassxc
 wget https://github.com/dvorka/mindforger/releases/download/1.52.0/mindforger_1.52.0-1_amd64.deb
 sudo apt install ./mindforger_1.52.0-1_amd64.deb
 rm ./mindforger_1.52.0-1_amd64.deb
+sudo apt install python3-pip
+sudo apt install python2
+wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+python2 get-pip.py
+sudo pip3 install virtualenv virtualenvwrapper
+pip3 install ipython ipdb
+python2 -m pip install ipython
+sudo add-apt-repository ppa:hluk/copyq
+sudo apt update
+sudo apt install copyq
 ```
 
 Actually get the dotfiles:
@@ -82,4 +86,10 @@ dotfiles config --local status.showUntrackedFiles no
 
 Note that if you already have some of the files you'll get an error message. You can either (1) delete them or (2) back them up somewhere else. It's up to you.
 
-after setup, open vim to install the plugins.
+Other things to do:
+- generate ssh key for github and setup .ssh/config file
+- copyq
+	- open with ctrl+e
+	- autostart
+	- avoid storing keepassxc passwords (https://superuser.com/questions/1112970/prevent-copyq-clipboard-manager-from-keeping-data-from-keepass)
+- open vim to install plugins
