@@ -64,3 +64,4 @@ if [ -z ${TMUX} ]; then
 	POWERLEVEL9K_INSTANT_PROMPT=quiet
 	neofetch --cpu_temp C --memory_percent on
 fi
+eval "$(pyenv init -)"
