@@ -28,7 +28,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # environment variables
-export PATH=$PATH:$HOME/.local/bin:$HOME/Apps
+export PATH=$PATH:$HOME/.local/bin:$HOME/Apps:$HOME/Android/Sdk/platform-tools
 
 # aliases
 alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
@@ -38,9 +38,8 @@ alias la='ls -A'
 alias l='ls -CF'
 alias sl='ls'
 alias ghidra="$HOME/ghidra_10.0.4_PUBLIC/ghidraRun"
-alias battlescribe="$HOME/BattleScribe_2.03.21/RosterEditor.sh"
 alias disableaslr="setarch x86_64 -R /bin/bash"
-alias ida="$HOME/idafree-7.0/ida64"
+alias ida="$HOME/Apps/ida/ida"
 alias hg="history | grep"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias untar='tar -zxvf'
@@ -53,8 +52,13 @@ alias c="clear"
 alias ta="tmux a -t"
 alias objdump="objdump -M intel"
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias baksmali="java -jar $HOME/Apps/baksmali-2.5.2.jar"
+alias smali="java -jar $HOME/Apps/smali-2.5.2.jar"
+alias dirbuster="$HOME/Apps/dirbuster/DirBuster-1.0-RC1.sh"
+alias jadx="$HOME/Apps/jadx/bin/jadx-gui"
 
 cs() { cd "$1" && ls; }
+path2clip() { readlink -e "$1" | xclip -selection clipboard  }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

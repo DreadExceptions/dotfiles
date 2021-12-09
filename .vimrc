@@ -4,6 +4,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'yuezk/vim-js'
 Plug 'maxmellon/vim-jsx-pretty'
 Plug 'elzr/vim-json'
+Plug 'kelwin/vim-smali'
 call plug#end()
 
 " project drawer on the left
