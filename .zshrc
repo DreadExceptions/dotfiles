@@ -42,7 +42,6 @@ alias disableaslr="setarch x86_64 -R /bin/bash"
 alias ida="$HOME/Apps/ida/ida"
 alias hg="history | grep"
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-alias untar='tar -zxvf'
 alias ..="cd .."
 alias ..2="cd ../.."
 alias ..3="cd ../../.."
