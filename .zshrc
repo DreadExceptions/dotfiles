@@ -28,7 +28,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # environment variables
-export PATH=$PATH:$HOME/.local/bin:$HOME/Apps:$HOME/Android/Sdk/platform-tools
+export PATH=$PATH:$HOME/.local/bin:$HOME/Apps:$HOME/Android/Sdk/platform-tools:$HOME/Android/Sdk/build-tools/31.0.0:$HOME/Android/Sdk/emulator:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/tools/bin
 
 # aliases
 alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
@@ -37,7 +37,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl='ls'
-alias ghidra="$HOME/ghidra_10.0.4_PUBLIC/ghidraRun"
+alias ghidra="$HOME/ghidra_10.1_PUBLIC/ghidraRun"
 alias disableaslr="setarch x86_64 -R /bin/bash"
 alias ida="$HOME/Apps/ida/ida"
 alias hg="history | grep"
