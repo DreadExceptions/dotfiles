@@ -55,6 +55,7 @@ alias baksmali="java -jar $HOME/Apps/baksmali-2.5.2.jar"
 alias smali="java -jar $HOME/Apps/smali-2.5.2.jar"
 alias dirbuster="$HOME/Apps/dirbuster/DirBuster-1.0-RC1.sh"
 alias jadx="$HOME/Apps/jadx/bin/jadx-gui"
+alias backlogs="find ${HOME}/mindforger-repos -type f -iname "backlog.md" -exec batcat --paging always {} \;"
 
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
