@@ -56,9 +56,13 @@ alias smali="java -jar $HOME/Apps/smali-2.5.2.jar"
 alias dirbuster="$HOME/Apps/dirbuster/DirBuster-1.0-RC1.sh"
 alias jadx="$HOME/Apps/jadx/bin/jadx-gui"
 alias backlogs="find ${HOME}/mindforger-repos -type f -iname "backlog.md" -exec batcat --paging always {} \;"
+alias bl="backlogs"
+alias ms="mindsearch"
 
+mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
+pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

@@ -21,6 +21,9 @@ augroup ProjectDrawer
   autocmd VimEnter * :Vexplore
 augroup END
 
+" tab size
+set tabstop=4
+
 " vim-codefmt formatters
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
