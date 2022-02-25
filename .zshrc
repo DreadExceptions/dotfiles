@@ -24,8 +24,11 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 source /usr/local/bin/virtualenvwrapper.sh
 
 # nvm 
-export NVM_DIR="$HOME/.nvm"
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # environment variables
 export PATH=$PATH:$HOME/.local/bin:$HOME/Apps:$HOME/Android/Sdk/platform-tools:$HOME/Android/Sdk/build-tools/31.0.0:$HOME/Android/Sdk/emulator:$HOME/Android/Sdk/tools:$HOME/Android/Sdk/tools/bin
@@ -58,8 +61,11 @@ alias jadx="$HOME/Apps/jadx/bin/jadx-gui"
 alias backlogs="find ${HOME}/mindforger-repos -type f -iname "backlog.md" -exec batcat --paging always {} \;"
 alias bl="backlogs"
 alias ms="mindsearch"
+alias msc="mindsearchcontext"
 
 mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
+# TODO do this in a proper way (e.g. with a parameter)
+mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
 pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' }
