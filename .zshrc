@@ -68,7 +68,7 @@ mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/mind
 mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
-pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' }
+pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' | xclip -sel clip }
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -79,3 +79,4 @@ if [ -z ${TMUX} ]; then
 	neofetch --cpu_temp C --memory_percent on
 fi
 eval "$(pyenv init -)"
+eval $(thefuck --alias)
