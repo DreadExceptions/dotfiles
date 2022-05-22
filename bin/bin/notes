@@ -1,0 +1,35 @@
+#!/bin/bash
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# simple note taking script
+# inspired by https://gist.github.com/oidz1234/e8d6b3dd6e0f5bd2af00886eff464c16
+#----------------------------------------
+
+#TODO properly handle options with getops and add checks
+#TODO implement filter in a decent way
+#TODO post contribution https://gist.github.com/oidz1234/e8d6b3dd6e0f5bd2af00886eff464c16
+#TODO fix the error if you put the ? in a note
+
+notefile="$HOME/.braindump"
+re='^[0-9]+$'
+
+if [ $# -eq 0 ]; then
+	cat $notefile
+else
+	if [ "$1" == "-t" ]; then
+		if [[ $2 =~ $re ]]; then
+			filtered_times=$(cat $notefile | grep $(date +%F) | cut -f 1 -d " " | cut -f 2 -d "T" | tr -d : | awk -v p=$2 '$0 >= p')
+			filtered_notes=()
+			for time in $filtered_times; do
+		    	formatted_time=${time:0:2}:${time:2:4}
+				cat $notefile | grep $(date +%F) | grep $formatted_time	
+				#filtered_notes+=("$(cat $notefile | grep $(date +%F) | grep $formatted_time)")	
+			done
+			#echo "${filtered_notes[*]}"
+		else
+			cat $notefile | grep $(date +%F) 
+		fi
+	else
+		echo "$(date +%FT%H:%M)" "$@" >> "$notefile"
+  	fi
+fi

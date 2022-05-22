@@ -25,13 +25,12 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-. "$HOME/.cargo/env"
 export PATH="/home/ulla/.local/share/solana/install/active_release/bin:$PATH"
 
 if [ -d "$HOME/.adb-fastboot/platform-tools" ] ; then
  export PATH="$HOME/.adb-fastboot/platform-tools:$PATH"
 fi
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+#export PYENV_ROOT="$HOME/.pyenv"
+#export PATH="$PYENV_ROOT/bin:$PATH"
+#eval "$(pyenv init -)"

@@ -1,0 +1,36 @@
+#!/bin/bash
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# completely upgrades and cleans my system
+#----------------------------------------
+
+# TODO check
+#https://tedleroy.github.io/ubuntu-update.sh/
+#https://gist.github.com/bocharsky-bw/fc692baacc07f0e430d5
+
+# check for root
+if [ $EUID -ne 0 ]; then
+	echo "Please run as root."
+       	exit 1
+fi
+
+# upgrade packages
+apt update && apt -y upgrade
+# remove useless dependencies and purge config files
+apt autoremove --purge
+# clean local apt cache
+apt clean
+
+# SNAP
+snap refresh
+
+#TODO check under /opt
+#TODO check if I have appimages somewhere
+# locate -r ".*\.AppImage
+#TODO check  apt list --installed | grep -E "\[installed,local\]" 
+
+# TUXEDO-TOMTE
+tuxedo-tomte reconfigure all
+
+# cleaning
+find ~/.cache/ -type f -atime +365 -delete

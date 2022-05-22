@@ -17,17 +17,19 @@ export UPDATE_ZSH_DAYS=7
 HIST_STAMPS="dd.mm.yyyy"
 
 # plugins to load
-plugins=(git zsh-autosuggestions pyenv)
+#plugins=(git zsh-autosuggestions pyenv)
+plugins=(git zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 source /usr/local/bin/virtualenvwrapper.sh
 
 # nvm 
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="/opt/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # environment variables
-export PATH=$PATH:$HOME/.local/bin:$HOME/Apps
+export PATH=$PATH:$HOME/.local/bin:$HOME/Apps:/opt/bin:$HOME/bin
 
 # aliases
 alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
@@ -36,12 +38,8 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 alias sl='ls'
-alias ghidra="$HOME/ghidra_9.2.2_PUBLIC/ghidraRun"
-alias battlescribe="$HOME/BattleScribe_2.03.21/RosterEditor.sh"
 alias disableaslr="setarch x86_64 -R /bin/bash"
-alias ida="$HOME/idafree-7.0/ida64"
 alias hg="history | grep"
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias untar='tar -zxvf'
 alias ..="cd .."
 alias ..2="cd ../.."
@@ -52,6 +50,9 @@ alias c="clear"
 alias ta="tmux a -t"
 alias objdump="objdump -M intel"
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+export RUSTUP_HOME=/opt/rust/rustup
+export CARGO_HOME=/opt/rust/cargo
 
 cs() { cd "$1" && ls; }
 
