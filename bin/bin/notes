@@ -3,33 +3,78 @@
 # Author: Lorenzo Alluminio
 # simple note taking script
 # inspired by https://gist.github.com/oidz1234/e8d6b3dd6e0f5bd2af00886eff464c16
+# TODO: 
+# - implement filter in a decent way
+# - check that hhmm is in the correct format
+# - fix the errors that come up if you put special chars in a note (e.g. ?)
 #----------------------------------------
 
-#TODO properly handle options with getops and add checks
-#TODO implement filter in a decent way
-#TODO post contribution https://gist.github.com/oidz1234/e8d6b3dd6e0f5bd2af00886eff464c16
-#TODO fix the error if you put the ? in a note
+# thanks https://stackoverflow.com/a/57295993
+getopts_get_optional_argument() {
+  eval next_token=\${$OPTIND}
+  if [[ -n $next_token && $next_token != -* ]]; then
+    OPTIND=$((OPTIND + 1))
+    OPTARG=$next_token
+  else
+    OPTARG=""
+  fi
+}
+
+usage() { 
+	echo "Usage: $(basename $0) -h || $(basename $0) [-t [hhmm]] || $(basename $0) note" 1>&2
+	echo "prints all notes to stdout if no arguments are passed" 1>&2
+	echo "if a string is passed, it is appended to the notes" 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-t, prints today's notes." 1>&2
+	echo "    If a time is passed in the format hhmm, only today's notes taken after that time are printed" 1>&2
+}
 
 notefile="$HOME/.braindump"
-re='^[0-9]+$'
+printnotes=0
 
-if [ $# -eq 0 ]; then
+while getopts ":th" o; do
+    case "${o}" in
+        t)
+	    printnotes=1    
+	    getopts_get_optional_argument $@
+	    hour=$OPTARG
+            ;;
+        h)
+            usage
+	    exit 0
+            ;;
+        *)
+            usage
+	    exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+# if no arguments, print all notes
+if [ $# -eq 0 ] && [ $printnotes -eq 0 ]; then
 	cat $notefile
-else
-	if [ "$1" == "-t" ]; then
-		if [[ $2 =~ $re ]]; then
-			filtered_times=$(cat $notefile | grep $(date +%F) | cut -f 1 -d " " | cut -f 2 -d "T" | tr -d : | awk -v p=$2 '$0 >= p')
-			filtered_notes=()
-			for time in $filtered_times; do
-		    	formatted_time=${time:0:2}:${time:2:4}
-				cat $notefile | grep $(date +%F) | grep $formatted_time	
-				#filtered_notes+=("$(cat $notefile | grep $(date +%F) | grep $formatted_time)")	
-			done
-			#echo "${filtered_notes[*]}"
-		else
-			cat $notefile | grep $(date +%F) 
-		fi
+	exit 0
+fi
+
+# if -t set, print today's notes and optionally filter by hour
+if [ $printnotes -eq 1 ]; then
+	if [ -n "$hour" ]; then
+		filtered_times=$(cat $notefile | grep $(date +%F) | cut -f 1 -d " " | cut -f 2 -d "T" | tr -d : | awk -v p=$hour '$0 >= p' | sort | uniq)
+		filtered_notes=()
+		for time in $filtered_times; do
+		formatted_time=${time:0:2}:${time:2:4}
+			cat $notefile | grep $(date +%F) | grep $formatted_time	
+			#filtered_notes+=("$(cat $notefile | grep $(date +%F) | grep $formatted_time)")	
+		done
+		#echo "${filtered_notes[*]}"
 	else
-		echo "$(date +%FT%H:%M)" "$@" >> "$notefile"
-  	fi
+		cat $notefile | grep $(date +%F) 
+	fi
+	exit 0
+fi
+
+# if -t is not set, but there are parameters, append them as notes
+if [ $printnotes -eq 0 ] && [ $# -ne 0 ]; then
+	echo "$(date +%FT%H:%M)" "$@" >> "$notefile"
 fi

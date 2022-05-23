@@ -8,6 +8,8 @@
 #https://tedleroy.github.io/ubuntu-update.sh/
 #https://gist.github.com/bocharsky-bw/fc692baacc07f0e430d5
 
+#TODO usage
+
 # check for root
 if [ $EUID -ne 0 ]; then
 	echo "Please run as root."

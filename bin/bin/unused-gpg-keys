@@ -3,12 +3,12 @@
 # Author: Lorenzo Alluminio
 # Script that identifies and optionally removes unused trusted gpg keys.
 # These keys are usually added to install software from non-standard repositories (e.g. PPAs)
+# TODO:
+# - what if source repo is not reachable
 #------------------------------------
 
-#TODO what if source repo is not reachable
-
 usage() { 
-	echo "Usage: $0 [-b] [-d] [-h]" 1>&2
+	echo "Usage: $(basename $0) [-b] [-d] [-h]" 1>&2
 	echo "prints to stdout the unused keys in the format <keyid> <userid>" 1>&2
 	echo "-b, backups trusted.gpg and trusted.gpg.d/ appending .bak (requires superuser)" 1>&2
 	echo "-d, deletes unused keys (requires superuser)" 1>&2
