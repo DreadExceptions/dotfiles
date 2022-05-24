@@ -2,13 +2,47 @@
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # completely upgrades and cleans my system
+# TODO:
+# - automatically update appimages
+# - automatically update optional packages under /opt 
+# - list software compiled from source under /usr
+# - automatically update software compiled from source under /usr
+# - automatically update local deb packages
 #----------------------------------------
 
-# TODO check
-#https://tedleroy.github.io/ubuntu-update.sh/
-#https://gist.github.com/bocharsky-bw/fc692baacc07f0e430d5
+GREEN='\033[1;32m'
+NC='\033[0m'
 
-#TODO usage
+usage() { 
+	echo "Usage: $(basename $0) [-h] [-y] [-Y]" 1>&2
+	echo "upgrades and cleans the system" 1>&2
+	echo "-y, automatically accepts apt upgrades." 1>&2
+	echo "-Y, automatically accepts apt autoremove." 1>&2
+	echo "-h, shows this help." 1>&2
+}
+
+upgradeopt=""
+autoremoveopt=""
+
+while getopts ":hyY" o; do
+    case "${o}" in
+        y)
+	    upgradeopt="-y"
+            ;;
+	Y)
+	    autoremoveopt="-y"
+	    ;;
+        h)
+            usage
+	    exit 0
+            ;;
+        *)
+            usage
+	    exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 
 # check for root
 if [ $EUID -ne 0 ]; then
@@ -16,23 +50,36 @@ if [ $EUID -ne 0 ]; then
        	exit 1
 fi
 
+echo -e "\n${GREEN}Upgrading and autoremoving apt packages${NC}\n"
 # upgrade packages
-apt update && apt -y upgrade
+apt update && apt $upgradeopt upgrade
 # remove useless dependencies and purge config files
-apt autoremove --purge
+apt $autoremoveopt autoremove --purge
 # clean local apt cache
 apt clean
 
+echo -e "\n${GREEN}Upgrading snaps${NC}\\n"
 # SNAP
 snap refresh
 
-#TODO check under /opt
-#TODO check if I have appimages somewhere
-# locate -r ".*\.AppImage
-#TODO check  apt list --installed | grep -E "\[installed,local\]" 
-
+echo -e "\n${GREEN}Reconfiguring tuxedo-tomte fixes${NC}\\n"
 # TUXEDO-TOMTE
 tuxedo-tomte reconfigure all
 
+# list local apt packages
+echo -e "\n${GREEN}The following local apt packages might need manual updates:${NC}\\n"
+apt list --installed | grep -E "\[installed,local\]" 
+
+# list appimages
+echo -e "\n${GREEN}The following AppImages might need updates:${NC}\\n"
+find /opt/appimages -type f 
+
+# list optional packages
+echo -e "\n${GREEN}The following optional packages might need updates:${NC}\\n"
+find /opt -mindepth 1 -maxdepth 1 -type d ! -path /opt/bin ! -path /opt/appimages
+
 # cleaning
-find ~/.cache/ -type f -atime +365 -delete
+echo -e "\n${GREEN}Cleaning the system${NC}\\n"
+find /home/ulla/.cache/ -type f -atime +365 -delete
+echo -e "\n${GREEN}Unused GPG keys:${NC}\\n"
+unused-gpg-keys
