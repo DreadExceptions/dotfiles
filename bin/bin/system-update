@@ -5,7 +5,6 @@
 # TODO:
 # - automatically update appimages
 # - automatically update optional packages under /opt 
-# - list software compiled from source under /usr
 # - automatically update software compiled from source under /usr
 # - automatically update local deb packages
 #----------------------------------------
@@ -77,6 +76,10 @@ find /opt/appimages -type f
 # list optional packages
 echo -e "\n${GREEN}The following optional packages might need updates:${NC}\\n"
 find /opt -mindepth 1 -maxdepth 1 -type d ! -path /opt/bin ! -path /opt/appimages
+
+# list software compiled from source
+echo -e "\n${GREEN}The following packages installed from source might need updates:${NC}\\n"
+find /usr/local/src -mindepth 1 -maxdepth 1 -type d
 
 # cleaning
 echo -e "\n${GREEN}Cleaning the system${NC}\\n"
