@@ -26,17 +26,16 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
+# light load powerlevel10k theme
+zinit ice depth"1"
+zinit light romkatv/powerlevel10k
+
 # ls colors
-# FIXME
 # https://zdharma-continuum.github.io/zinit/wiki/LS_COLORS-explanation/ 
 zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
     atpull'%atclone' pick"clrs.zsh" nocompile'!' \
     atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
 zinit light trapd00r/LS_COLORS
-
-# light load powerlevel10k theme
-zinit ice depth"1"
-zinit light romkatv/powerlevel10k
 
 # turbo load fast-syntax-highlighting
 zinit ice wait lucid atinit"zicompinit; zicdreplay"

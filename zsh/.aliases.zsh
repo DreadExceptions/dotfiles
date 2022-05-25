@@ -1,8 +1,9 @@
 alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias sl='ls'    
+alias ls="ls --color"
+alias ll="ls -alF"
+alias la="ls -A"
+alias l="ls -CF"
+alias sl="ls"    
 alias disableaslr="setarch x86_64 -R /bin/bash"
 alias hg="history | grep"
 alias untar='tar -zxvf'
