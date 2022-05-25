@@ -19,7 +19,8 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# zinit default plugins
+# load zinit extensions
+# https://zdharma-continuum.github.io/zinit/wiki/Annexes/
 zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
@@ -37,28 +38,33 @@ zinit ice atclone"dircolors -b LS_COLORS > clrs.zsh" \
     atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”'
 zinit light trapd00r/LS_COLORS
 
-# turbo load fast-syntax-highlighting
+# turbo load basic setup (fast-syntax-highlighting, zsh-autosuggestions and zsh-completions)
+# https://zdharma-continuum.github.io/zinit/wiki/Example-Minimal-Setup/
 zinit ice wait lucid atinit"zicompinit; zicdreplay"
 zinit load zdharma-continuum/fast-syntax-highlighting
-
-# turbo load zsh-autosuggestions
 zinit ice wait lucid atload"_zsh_autosuggest_start"
 zinit load zsh-users/zsh-autosuggestions
-
-# turbo load zsh-completions
 zinit ice blockf atpull'zinit creinstall -q .'
 zinit load zsh-users/zsh-completions
 
-# nvm (install as plugin?) 
-export NVM_DIR="/opt/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# turbo load additional plugins
+zinit ice wait lucid
+zinit load MichaelAquilina/zsh-you-should-use
+zinit ice wait lucid
+zinit load Tarrasch/zsh-command-not-found
 
-# rust (install as plugin?)
-export RUSTUP_HOME=/opt/rust/rustup
-export CARGO_HOME=/opt/rust/cargo
+# turbo load nodenv and pyenv
+zinit ice wait lucid
+zinit load mattberther/zsh-nodenv
+zinit ice wait lucid
+zinit load mattberther/zsh-pyenv
 
-# include aliases
+# source environment variables
+if [ -f "$HOME/.zshenv" ]; then
+	source $HOME/.zshenv
+fi
+
+# source aliases
 if [ -f "$HOME/.aliases.zsh" ]; then
 	source $HOME/.aliases.zsh
 fi
