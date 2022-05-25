@@ -22,7 +22,3 @@ fi
 if [ -d "/opt/bin" ] ; then
     PATH="/opt/bin:$PATH"
 fi
-
-#export PYENV_ROOT="$HOME/.pyenv"
-#export PATH="$PYENV_ROOT/bin:$PATH"
-#eval "$(pyenv init -)"
