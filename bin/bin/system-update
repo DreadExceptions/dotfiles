@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/bin/zsh
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # completely upgrades and cleans my system
 # TODO:
+# - fix zinit not found
 # - automatically update appimages
 # - automatically update optional packages under /opt 
 # - automatically update software compiled from source under /usr
@@ -61,10 +62,9 @@ echo -e "\n${GREEN}Upgrading snaps${NC}\\n"
 # SNAP
 snap refresh
 
-
-echo -e "\n${GREEN}Upgrading zinit${NC}\\n"
-zinit self-update
-zinit update
+#echo -e "\n${GREEN}Upgrading zinit${NC}\\n"
+#zinit self-update
+#zinit update
 
 echo -e "\n${GREEN}Reconfiguring tuxedo-tomte fixes${NC}\\n"
 # TUXEDO-TOMTE
