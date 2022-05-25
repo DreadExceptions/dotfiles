@@ -52,6 +52,8 @@ zinit ice wait lucid
 zinit load MichaelAquilina/zsh-you-should-use
 zinit ice wait lucid
 zinit load Tarrasch/zsh-command-not-found
+zinit ice wait'1' lucid
+zinit load laggardkernel/zsh-thefuck
 
 # turbo load nodenv and pyenv
 zinit ice wait lucid

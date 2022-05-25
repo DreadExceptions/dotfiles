@@ -17,3 +17,14 @@ alias ta="tmux a -t"
 alias objdump="objdump -M intel"
 # usage: sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+alias backlogs="find ${HOME}/cryptomator_mnts/mindforger-repos -type f -iname "backlog.md" -exec batcat --paging always {} \;"
+alias bl="backlogs"
+alias ms="mindsearch"
+alias msc="mindsearchcontext"
+
+mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
+# TODO do this in a proper way (e.g. with a parameter)
+mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
+cs() { cd "$1" && ls; }
+path2clip() { readlink -e "$1" | xclip -selection clipboard  }
+pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' | xclip -sel clip }
