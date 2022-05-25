@@ -61,6 +61,11 @@ echo -e "\n${GREEN}Upgrading snaps${NC}\\n"
 # SNAP
 snap refresh
 
+
+echo -e "\n${GREEN}Upgrading zinit${NC}\\n"
+zinit self-update
+zinit update
+
 echo -e "\n${GREEN}Reconfiguring tuxedo-tomte fixes${NC}\\n"
 # TUXEDO-TOMTE
 tuxedo-tomte reconfigure all

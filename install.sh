@@ -5,3 +5,4 @@
 #----------------------------------------
 
 #TODO check old readme
+# install etckeeper
