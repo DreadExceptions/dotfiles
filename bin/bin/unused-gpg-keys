@@ -39,14 +39,6 @@ while getopts ":bdh" o; do
 done
 shift $((OPTIND-1))
 
-# check if sudo needed
-if [ $backup -eq 1 ] || [ $delete -eq 1 ]; then
-	if [ $EUID -ne 0 ]; then
-    		echo "Please run as root."
-    		exit 1
-	fi
-fi
-
 # create directory in /tmp with random name
 tmpdir=$(mktemp -d)
 #echo "storing tmp files in $tmpdir" 1>&2

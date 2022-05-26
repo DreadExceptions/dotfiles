@@ -3,15 +3,15 @@
 # Author: Lorenzo Alluminio
 # completely upgrades and cleans my system
 # TODO:
-# - fix zinit not found
 # - automatically update appimages
 # - automatically update optional packages under /opt 
 # - automatically update software compiled from source under /usr
 # - automatically update local deb packages
 #----------------------------------------
 
-GREEN='\033[1;32m'
-NC='\033[0m'
+GREEN="\033[1;32m"
+RED="\033[1;30m"
+NC="\033[0m"
 
 usage() { 
 	echo "Usage: $(basename $0) [-h] [-y] [-Y]" 1>&2
@@ -58,36 +58,40 @@ apt $autoremoveopt autoremove --purge
 # clean local apt cache
 apt clean
 
-echo -e "\n${GREEN}Upgrading snaps${NC}\\n"
+echo -e "\n${GREEN}Upgrading snaps${NC}\n"
 # SNAP
 snap refresh
 
-#echo -e "\n${GREEN}Upgrading zinit${NC}\\n"
-#zinit self-update
-#zinit update
-
-echo -e "\n${GREEN}Reconfiguring tuxedo-tomte fixes${NC}\\n"
+echo -e "\n${GREEN}Reconfiguring tuxedo-tomte fixes${NC}\n"
 # TUXEDO-TOMTE
 tuxedo-tomte reconfigure all
 
+# drop sudo to upgrade zinit and print unused gpg keys
+echo -e "\n${GREEN}Upgrading zinit${NC}\n"
+sudo -u ulla zsh<<_
+source /home/ulla/.zshrc
+zinit self-update
+zinit update
+echo -e "\n${GREEN}Unused GPG keys:${NC}\n"
+unused-gpg-keys
+_
+
 # list local apt packages
-echo -e "\n${GREEN}The following local apt packages might need manual updates:${NC}\\n"
+echo -e "\n${GREEN}The following local apt packages might need manual updates:${NC}\n"
 apt list --installed | grep -E "\[installed,local\]" 
 
 # list appimages
-echo -e "\n${GREEN}The following AppImages might need updates:${NC}\\n"
+echo -e "\n${GREEN}The following AppImages might need updates:${NC}\n"
 find /opt/appimages -type f 
 
 # list optional packages
-echo -e "\n${GREEN}The following optional packages might need updates:${NC}\\n"
+echo -e "\n${GREEN}The following optional packages might need updates:${NC}\n"
 find /opt -mindepth 1 -maxdepth 1 -type d ! -path /opt/bin ! -path /opt/appimages
 
 # list software compiled from source
-echo -e "\n${GREEN}The following packages installed from source might need updates:${NC}\\n"
+echo -e "\n${GREEN}The following packages installed from source might need updates:${NC}\n"
 find /usr/local/src -mindepth 1 -maxdepth 1 -type d
 
 # cleaning
-echo -e "\n${GREEN}Cleaning the system${NC}\\n"
+echo -e "\n${GREEN}Cleaning home cache${NC}\n"
 find /home/ulla/.cache/ -type f -atime +365 -delete
-echo -e "\n${GREEN}Unused GPG keys:${NC}\\n"
-unused-gpg-keys
