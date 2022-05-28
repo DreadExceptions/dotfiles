@@ -21,10 +21,12 @@ alias backlogs="find ${HOME}/cryptomator_mnts/mindforger-repos -type f -iname "b
 alias bl="backlogs"
 alias ms="mindsearch"
 alias msc="mindsearchcontext"
+alias dotfilestodo="grep --color=always -ri 'TODO' ."
+alias grep="grep --color=always"
 
-mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
+mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/cryptomator_mnts/mindforger-repos | less -r}
 # TODO do this in a proper way (e.g. with a parameter)
-mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always ${HOME}/mindforger-repos | less}
+mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always ${HOME}/cryptomator_mnts/mindforger-repos | less -r}
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
 pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' | xclip -sel clip }
