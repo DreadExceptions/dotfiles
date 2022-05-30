@@ -61,6 +61,11 @@ zinit load mattberther/zsh-nodenv
 zinit ice wait lucid
 zinit load mattberther/zsh-pyenv
 
+# enable tab completion menu
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+
 # source environment variables
 if [ -f "$HOME/.zshenv" ]; then
 	source $HOME/.zshenv

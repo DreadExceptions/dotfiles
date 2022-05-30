@@ -23,6 +23,7 @@ alias ms="mindsearch"
 alias msc="mindsearchcontext"
 alias dotfilestodo="grep --color=always -ri 'TODO' ."
 alias grep="grep --color=always"
+alias bat="batcat"
 
 mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/cryptomator_mnts/mindforger-repos | less -r}
 # TODO do this in a proper way (e.g. with a parameter)
