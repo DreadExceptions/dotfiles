@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #------------------------------------
 # Author: Lorenzo Alluminio
 # Script that identifies and optionally removes unused trusted gpg keys.
