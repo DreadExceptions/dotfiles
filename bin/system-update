@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # completely upgrades and cleans my system
@@ -10,11 +10,10 @@
 #----------------------------------------
 
 GREEN="\033[1;32m"
-RED="\033[1;30m"
 NC="\033[0m"
 
 usage() { 
-	echo "Usage: $(basename $0) [-h] [-y] [-Y]" 1>&2
+	echo "Usage: $(basename "$0") [-h] [-y] [-Y]" 1>&2
 	echo "upgrades and cleans the system" 1>&2
 	echo "-y, automatically accepts apt upgrades." 1>&2
 	echo "-Y, automatically accepts apt autoremove." 1>&2
@@ -45,12 +44,13 @@ done
 shift $((OPTIND-1))
 
 # check for root
-if [ $EUID -ne 0 ]; then
+EUID=$(id -u)
+if [ "$EUID" -ne 0 ]; then
 	echo "Please run as root."
-       	exit 1
+  exit 1
 fi
 
-echo -e "\n${GREEN}Upgrading and autoremoving apt packages${NC}\n"
+printf "\n%bUpgrading and autoremoving apt packages%b\n" "$GREEN" "$NC"
 # upgrade packages
 apt update && apt $upgradeopt upgrade
 # remove useless dependencies and purge config files
@@ -58,40 +58,40 @@ apt $autoremoveopt autoremove --purge
 # clean local apt cache
 apt clean
 
-echo -e "\n${GREEN}Upgrading snaps${NC}\n"
+printf "\n%bUpgrading snaps%b\n" "$GREEN" "$NC"
 # SNAP
 snap refresh
 
-echo -e "\n${GREEN}Reconfiguring tuxedo-tomte fixes${NC}\n"
+printf "\n%bReconfiguring tuxedo-tomte fixes%b\n" "$GREEN" "$NC"
 # TUXEDO-TOMTE
 tuxedo-tomte reconfigure all
 
 # drop sudo to upgrade zinit and print unused gpg keys
-echo -e "\n${GREEN}Upgrading zinit${NC}\n"
+printf "\n%bUpgrading zinit%b\n" "$GREEN" "$NC"
 sudo -u ulla zsh<<_
 source /home/ulla/.zshrc
 zinit self-update
 zinit update
-echo -e "\n${GREEN}Unused GPG keys:${NC}\n"
+printf "\n%bUnused GPG keys:%b\n" "$GREEN" "$NC"
 unused-gpg-keys
 _
 
 # list local apt packages
-echo -e "\n${GREEN}The following local apt packages might need manual updates:${NC}\n"
+printf "\n%bThe following local apt packages might need manual updates:%b\n" "$GREEN" "$NC"
 apt list --installed | grep -E "\[installed,local\]" 
 
 # list appimages
-echo -e "\n${GREEN}The following AppImages might need updates:${NC}\n"
+printf "\n%bThe following AppImages might need updates:%b\n" "$GREEN" "$NC"
 find /opt/appimages -type f 
 
 # list optional packages
-echo -e "\n${GREEN}The following optional packages might need updates:${NC}\n"
+printf "\n%bThe following optional packages might need updates:%b\n" "$GREEN" "$NC"
 find /opt -mindepth 1 -maxdepth 1 -type d ! -path /opt/bin ! -path /opt/appimages
 
 # list software compiled from source
-echo -e "\n${GREEN}The following packages installed from source might need updates:${NC}\n"
+printf "\n%bThe following packages installed from source might need updates:%b\n" "$GREEN" "$NC"
 find /usr/local/src -mindepth 1 -maxdepth 1 -type d
 
 # cleaning
-echo -e "\n${GREEN}Cleaning home cache${NC}\n"
+printf "\n%bCleaning home cache%b\n" "$GREEN" "$NC"
 find /home/ulla/.cache/ -type f -atime +365 -delete

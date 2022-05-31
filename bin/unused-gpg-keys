@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #------------------------------------
 # Author: Lorenzo Alluminio
 # Script that identifies and optionally removes unused trusted gpg keys.
@@ -8,7 +8,7 @@
 #------------------------------------
 
 usage() { 
-	echo "Usage: $(basename $0) [-b] [-d] [-h]" 1>&2
+	echo "Usage: $(basename "$0") [-b] [-d] [-h]" 1>&2
 	echo "prints to stdout the unused keys in the format <keyid> <userid>" 1>&2
 	echo "-b, backups trusted.gpg and trusted.gpg.d/ appending .bak (requires superuser)" 1>&2
 	echo "-d, deletes unused keys (requires superuser)" 1>&2
@@ -44,41 +44,41 @@ tmpdir=$(mktemp -d)
 #echo "storing tmp files in $tmpdir" 1>&2
 
 # get list of sources
-grep -h ^deb /etc/apt/sources.list /etc/apt/sources.list.d/*.list > ${tmpdir}/sources
+grep -h ^deb /etc/apt/sources.list /etc/apt/sources.list.d/*.list > "${tmpdir}"/sources
 
 # get list of releases files
 # first sed expression removes content between square brackets (such as architecture specifications)
 # cut is used to get only the source url and the distro we are using
 # the 2 subsequent sed expressions are used piece everything together and generate the url to the Release.gpg file we need
 # sort and uniq are used to eliminate duplicate entries
-cat ${tmpdir}/sources | sed -e "s/\[.*\] //" | cut -d " " -f 2,3 | sed -E -e "s/\/? /\/dists\//" | sed -e "s/$/\/Release.gpg/" | sort | uniq > ${tmpdir}/releases
+sed -e "s/\[.*\] //" "${tmpdir}/sources" | cut -d " " -f 2,3 | sed -E -e "s/\/? /\/dists\//" | sed -e "s/$/\/Release.gpg/" | sort | uniq > "${tmpdir}"/releases
 
 # for each source, compute the keyid and save it in a file
-while read url; do
-	wget -q -T 10 -O ${tmpdir}/Release.gpg $url
-	gpg --list-packets ${tmpdir}/Release.gpg | grep "keyid" | grep -Eo "[0-9A-F]{16}" >> ${tmpdir}/sourcekeyidstemp
-done <${tmpdir}/releases
+while read -r url; do
+	wget -q -T 10 -O "${tmpdir}"/Release.gpg "$url"
+	gpg --list-packets "${tmpdir}"/Release.gpg | grep "keyid" | grep -Eo "[0-9A-F]{16}" >> "${tmpdir}"/sourcekeyidstemp
+done <"${tmpdir}"/releases
 
 # remove duplicate entries
-cat ${tmpdir}/sourcekeyidstemp | sort | uniq > ${tmpdir}/sourcekeyids
+sort "${tmpdir}"/sourcekeyidstemp | uniq > "${tmpdir}"/sourcekeyids
 
 # for each trusted gpg key, extract his keyid and userid
-gpg --list-packets /etc/apt/trusted.gpg | grep -A 8 "public key packet" | grep -E "keyid:|user ID" | grep -oE "[0-9A-F]{16}|\".*\""  | awk '{(getline tmp); print $0,tmp}' > ${tmpdir}/trustedkeys
+gpg --list-packets /etc/apt/trusted.gpg | grep -A 8 "public key packet" | grep -E "keyid:|user ID" | grep -oE "[0-9A-F]{16}|\".*\""  | awk '{(getline tmp); print $0,tmp}' > "${tmpdir}"/trustedkeys
 
 for f in /etc/apt/trusted.gpg.d/*.gpg; do
-	gpg --list-packets "$f" | grep -A 8 "public key packet" | grep -E "keyid:|user ID" | grep -oE "[0-9A-F]{16}|\".*\""  | awk '{(getline tmp); print $0,tmp}' >> ${tmpdir}/trustedkeys
+	gpg --list-packets "$f" | grep -A 8 "public key packet" | grep -E "keyid:|user ID" | grep -oE "[0-9A-F]{16}|\".*\""  | awk '{(getline tmp); print $0,tmp}' >> "${tmpdir}"/trustedkeys
 done
 
 # for each trusted gpg key, check if in use
-touch ${tmpdir}/unusedkeys
-while read line; do
-	keyid=$(echo $line | cut -d "\"" -f 1)
-	userid=$(echo $line | cut -d "\"" -f 2)
-	check=$(grep $keyid ${tmpdir}/sourcekeyids)
-	if [ -z $check ]; then
-		echo "${keyid} ${userid}" >> ${tmpdir}/unusedkeys
+touch "${tmpdir}"/unusedkeys
+while read -r line; do
+	keyid=$(echo "$line" | cut -d "\"" -f 1)
+	userid=$(echo "$line" | cut -d "\"" -f 2)
+	check=$(grep "$keyid" "${tmpdir}"/sourcekeyids)
+	if [ -z "$check" ]; then
+		echo "${keyid} ${userid}" >> "${tmpdir}"/unusedkeys
 	fi 
-done <${tmpdir}/trustedkeys
+done <"${tmpdir}"/trustedkeys
 
 # backup gpg keys 
 if [ $backup -eq 1 ]; then
@@ -88,12 +88,12 @@ fi
 
 # delete unused gpg keys
 if [ $delete -eq 1 ]; then
-	while read line; do
-		keyid=$(echo $line | cut -d "\"" -f 1)
-		sudo apt-key del $keyid >/dev/null
-	done <${tmpdir}/unusedkeys
+	while read -r line; do
+		keyid=$(echo "$line" | cut -d "\"" -f 1)
+		sudo apt-key del "$keyid" >/dev/null
+	done <"${tmpdir}"/unusedkeys
 	echo "deleted keys:"
 fi
 
 # print unused keys
-cat ${tmpdir}/unusedkeys
+cat "${tmpdir}"/unusedkeys

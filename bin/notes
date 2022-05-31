@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # simple note taking script
@@ -9,10 +9,12 @@
 # - fix the errors that come up if you put special chars in a note (e.g. ?)
 #----------------------------------------
 
-# thanks https://stackoverflow.com/a/57295993
+# adapted from https://stackoverflow.com/a/57295993
 getopts_get_optional_argument() {
-  eval next_token=\${$OPTIND}
-  if [[ -n $next_token && $next_token != -* ]]; then
+	next_token=""
+  eval next_token="\${$OPTIND}"
+	nt_first_char="$(printf "%s" "$next_token" | cut -c1)"
+  if [ -n "$next_token" ] && [ "$nt_first_char" != "-" ]; then
     OPTIND=$((OPTIND + 1))
     OPTARG=$next_token
   else
@@ -21,7 +23,7 @@ getopts_get_optional_argument() {
 }
 
 usage() { 
-	echo "Usage: $(basename $0) -h || $(basename $0) [-t [hhmm]] || $(basename $0) note" 1>&2
+	echo "Usage: $(basename "$0") -h || $(basename "$0") [-t [hhmm]] || $(basename "$0") note" 1>&2
 	echo "prints all notes to stdout if no arguments are passed" 1>&2
 	echo "if a string is passed, it is appended to the notes" 1>&2
 	echo "-h, shows this help." 1>&2
@@ -36,7 +38,7 @@ while getopts ":th" o; do
     case "${o}" in
         t)
 	    printnotes=1    
-	    getopts_get_optional_argument $@
+	    getopts_get_optional_argument "$@"
 	    hour=$OPTARG
             ;;
         h)
@@ -53,23 +55,22 @@ shift $((OPTIND-1))
 
 # if no arguments, print all notes
 if [ $# -eq 0 ] && [ $printnotes -eq 0 ]; then
-	cat $notefile
+	cat "$notefile"
 	exit 0
 fi
 
 # if -t set, print today's notes and optionally filter by hour
 if [ $printnotes -eq 1 ]; then
 	if [ -n "$hour" ]; then
-		filtered_times=$(cat $notefile | grep $(date +%F) | cut -f 1 -d " " | cut -f 2 -d "T" | tr -d : | awk -v p=$hour '$0 >= p' | sort | uniq)
-		filtered_notes=()
+		filtered_times=$(grep "$(date +%F)" "$notefile" | cut -f 1 -d " " | cut -f 2 -d "T" | tr -d : | awk -v p="$hour" '$0 >= p' | sort | uniq)
 		for time in $filtered_times; do
-		formatted_time=${time:0:2}:${time:2:4}
-			cat $notefile | grep $(date +%F) | grep $formatted_time	
-			#filtered_notes+=("$(cat $notefile | grep $(date +%F) | grep $formatted_time)")	
+			hh=$(echo "$time" | awk  '{ string=substr($0, 1, 2); print string; }' )
+			mm=$(echo "$time" | awk  '{ string=substr($0, 3, 4); print string; }' )
+			formatted_time="$hh:$mm"
+			grep "$(date +%F)" "$notefile" | grep "$formatted_time"	
 		done
-		#echo "${filtered_notes[*]}"
 	else
-		cat $notefile | grep $(date +%F) 
+		grep "$(date +%F)" "$notefile" 
 	fi
 	exit 0
 fi
