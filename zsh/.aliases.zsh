@@ -29,7 +29,7 @@ alias notes="noglob $HOME/bin/notes"
 # functions
 
 mindsearch() { par="$@"; /usr/bin/grep -E -ri "$par" --color=always ${HOME}/cryptomator_mnts/mindforger-repos | less -r}
-# TODO do this in a proper way (e.g. with a parameter)
+# TODO do this in a proper way (e.g. with a parameter for the context)
 mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always ${HOME}/cryptomator_mnts/mindforger-repos | less -r}
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
