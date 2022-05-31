@@ -6,7 +6,6 @@
 # TODO: 
 # - implement filter in a decent way
 # - check that hhmm is in the correct format
-# - fix the errors that come up if you put special chars in a note (e.g. ?)
 #----------------------------------------
 
 # adapted from https://stackoverflow.com/a/57295993
