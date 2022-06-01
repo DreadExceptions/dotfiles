@@ -55,6 +55,12 @@ zinit load Tarrasch/zsh-command-not-found
 zinit ice wait'1' lucid
 zinit load laggardkernel/zsh-thefuck
 
+# turbo load atuin
+export ATUIN_NOBIND="true"
+zinit ice wait lucid
+zinit load ellie/atuin
+bindkey '^r' _atuin_search_widget
+
 # turbo load nodenv and pyenv
 zinit ice wait lucid
 zinit load mattberther/zsh-nodenv
@@ -78,3 +84,5 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+eval "$(atuin init zsh)"
