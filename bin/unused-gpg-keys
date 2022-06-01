@@ -41,7 +41,7 @@ shift $((OPTIND-1))
 
 # create directory in /tmp with random name
 tmpdir=$(mktemp -d)
-echo "storing tmp files in $tmpdir" 1>&2
+#echo "storing tmp files in $tmpdir" 1>&2
 
 # get list of sources
 grep -h ^deb /etc/apt/sources.list /etc/apt/sources.list.d/*.list > "${tmpdir}"/sources

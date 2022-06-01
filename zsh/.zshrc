@@ -54,6 +54,8 @@ zinit ice wait lucid
 zinit load Tarrasch/zsh-command-not-found
 zinit ice wait'1' lucid
 zinit load laggardkernel/zsh-thefuck
+zinit ice wait lucid
+zinit load radian-software/wdx
 
 # turbo load atuin
 export ATUIN_NOBIND="true"
@@ -71,6 +73,10 @@ zinit load mattberther/zsh-pyenv
 autoload -Uz compinit
 compinit
 zstyle ':completion:*' menu select
+
+# enable auto cd and auto pushd
+setopt autocd
+setopt autopushd
 
 # source environment variables
 if [ -f "$HOME/.zshenv" ]; then
