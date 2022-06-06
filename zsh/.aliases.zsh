@@ -34,3 +34,9 @@ mindsearchcontext() { par="$@"; /usr/bin/grep -C 2 -E -ri "$par" --color=always 
 cs() { cd "$1" && ls; }
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
 pformat() { echo "$@" | tr " \n" "-" | tr '[:upper:]' '[:lower:]' | sed 's/-$//' | xclip -sel clip }
+wdx-ls-verbose() {
+	for point in $(wdx ls | tr "\n" " "); do
+		ppath=$(wdx show "$point")
+		echo "$point -> $ppath"
+	done
+} 

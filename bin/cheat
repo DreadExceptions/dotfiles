@@ -1,0 +1,48 @@
+#!/bin/sh
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# conveniency wrapper for cheat.sh
+# TODO:
+# - usage
+# - better options
+# - decide wether to use this wrapper or the one provided by the project
+#			- downloaded in /opt/cheat
+#----------------------------------------
+
+#usage() { 
+#	echo "Usage: $(basename "$0") -h || $(basename "$0") [-t [hhmm]] || $(basename "$0") note" 1>&2
+#	echo "prints all notes to stdout if no arguments are passed" 1>&2
+#	echo "if a string is passed, it is appended to the notes" 1>&2
+#	echo "-h, shows this help." 1>&2
+#	echo "-t, prints today's notes." 1>&2
+#	echo "    If a time is passed in the format hhmm, only today's notes taken after that time are printed" 1>&2
+#}
+
+#while getopts ":th" o; do
+#    case "${o}" in
+#        t)
+#	    printnotes=1    
+#	    getopts_get_optional_argument "$@"
+#	    hour=$OPTARG
+#            ;;
+#        h)
+#            usage
+#	    exit 0
+#            ;;
+#        *)
+#            usage
+#	    exit 1
+#            ;;
+#    esac
+#done
+#shift $((OPTIND-1))
+
+topic="$1"
+shift 1
+query=$(echo "$@" | tr " " "+")
+
+if [ -z "$query" ]; then
+	curl "cheat.sh/$topic"
+else
+	curl "cheat.sh/$topic/$query"
+fi
