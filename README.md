@@ -1,3 +1,3 @@
 Dotfiles managed with GNU stow.
 
-install.sh is untested.
+install.sh contains untested code.
