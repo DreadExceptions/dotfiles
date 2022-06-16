@@ -5,18 +5,23 @@
 #----------------------------------------
 
 usage() { 
-	echo "Usage: $(basename "$0") [-d days] [location]" 1>&2
+	echo "Usage: $(basename "$0") [-d days] [-n] [location]" 1>&2
 	echo "shows the weather forecast for $LOCATIONLONG if a location is not specified" 1>&2
 	echo "if a location is passed, shows the weather for that location" 1>&2
 	echo "-d days, specifies how many days of forecast to show (max. 3, default 2)" 1>&2
+  echo "-n, narrow format (only day and night)" 1>&2
 	echo "-h, shows this help." 1>&2
 }
 
 DAYS=2
-while getopts ":d:h" o; do
+NARROW=""
+while getopts ":d:nh" o; do
     case "${o}" in
         d)
 	    			DAYS=$OPTARG
+            ;;
+        n)
+            NARROW="n"
             ;;
         h)
             usage
@@ -37,7 +42,7 @@ if [ -z "$LOCATION" ]; then
 fi
 
 # build query string
-QUERY_STRING="${LOCATION}?${DAYS}F"
+QUERY_STRING="${LOCATION}?${DAYS}${NARROW}F"
 
 # perform request
 curl -s "https://wttr.in/$QUERY_STRING"

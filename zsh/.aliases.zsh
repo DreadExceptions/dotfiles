@@ -25,6 +25,7 @@ alias dotfilestodo="grep --color=always -ri 'TODO' ."
 alias grep="grep --color=always"
 alias bat="batcat"
 alias notes="noglob $HOME/bin/notes"
+alias wtoday="weather -d 1 -n"
 
 # functions
 
