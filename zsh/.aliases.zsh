@@ -21,7 +21,7 @@ alias backlogs="find ${HOME}/cryptomator_mnts/mindforger-repos -type f -iname "b
 alias bl="backlogs"
 alias ms="mindsearch"
 alias msc="mindsearchcontext"
-alias dotfilestodo="grep --color=always -ri 'TODO' ."
+alias dotfilestodo="grep --color=always -ri 'TODO' ${HOME}/dotfiles"
 alias grep="grep --color=always"
 alias bat="batcat"
 alias notes="noglob $HOME/bin/notes"
