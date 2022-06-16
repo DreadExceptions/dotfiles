@@ -5,4 +5,5 @@ export CARGO_HOME=/opt/rust/cargo
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
 # set location variable
-export LOCATION=$(cat $HOME/dotfiles/location/.location)
+export LOCATIONLONG=$(cat $HOME/dotfiles/location/.location | sed '/^#/d' | cut -d "|" -f 1 | tr " " "+")
+export LOCATIONSHORT=$(cat $HOME/dotfiles/location/.location | sed '/^#/d' | cut -d "|" -f 2)

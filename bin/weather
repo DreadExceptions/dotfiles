@@ -2,40 +2,42 @@
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # conveniency wrapper for wttr.in
-# #TODO: 
-# - allow display of full address to avoid  name collision
-# - allow some flexibility through options
-# - if no parameter get current location from file
-# - usage
 #----------------------------------------
 
-#usage() { 
-#	echo "Usage: $(basename "$0") -h || $(basename "$0") [-t [hhmm]] || $(basename "$0") note" 1>&2
-#	echo "prints all notes to stdout if no arguments are passed" 1>&2
-#	echo "if a string is passed, it is appended to the notes" 1>&2
-#	echo "-h, shows this help." 1>&2
-#	echo "-t, prints today's notes." 1>&2
-#	echo "    If a time is passed in the format hhmm, only today's notes taken after that time are printed" 1>&2
-#}
+usage() { 
+	echo "Usage: $(basename "$0") [-d days] [location]" 1>&2
+	echo "shows the weather forecast for $LOCATIONLONG if a location is not specified" 1>&2
+	echo "if a location is passed, shows the weather for that location" 1>&2
+	echo "-d days, specifies how many days of forecast to show (max. 3, default 2)" 1>&2
+	echo "-h, shows this help." 1>&2
+}
 
-#while getopts ":th" o; do
-#    case "${o}" in
-#        t)
-#	    printnotes=1    
-#	    getopts_get_optional_argument "$@"
-#	    hour=$OPTARG
-#            ;;
-#        h)
-#            usage
-#	    exit 0
-#            ;;
-#        *)
-#            usage
-#	    exit 1
-#            ;;
-#    esac
-#done
-#shift $((OPTIND-1))
+DAYS=2
+while getopts ":d:h" o; do
+    case "${o}" in
+        d)
+	    			DAYS=$OPTARG
+            ;;
+        h)
+            usage
+	    			exit 0
+            ;;
+        *)
+            usage
+	    			exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 
-location=$(echo "$@" | tr " " "+")
-curl --no-progress-meter "https://wttr.in/$location?2Q" | head -n -1
+# define location
+LOCATION=$(echo "$@" | tr " " "+")
+if [ -z "$LOCATION" ]; then
+	LOCATION="$LOCATIONLONG"
+fi
+
+# build query string
+QUERY_STRING="${LOCATION}?${DAYS}F"
+
+# perform request
+curl -s "https://wttr.in/$QUERY_STRING"
