@@ -2,47 +2,93 @@
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # conveniency wrapper for cheat.sh
-# TODO:
-# - usage
-# - better options
-# - decide wether to use this wrapper or the one provided by the project
-#			- downloaded in /opt/cheat
 #----------------------------------------
 
-#usage() { 
-#	echo "Usage: $(basename "$0") -h || $(basename "$0") [-t [hhmm]] || $(basename "$0") note" 1>&2
-#	echo "prints all notes to stdout if no arguments are passed" 1>&2
-#	echo "if a string is passed, it is appended to the notes" 1>&2
-#	echo "-h, shows this help." 1>&2
-#	echo "-t, prints today's notes." 1>&2
-#	echo "    If a time is passed in the format hhmm, only today's notes taken after that time are printed" 1>&2
-#}
+usage() { 
+	echo "Usage: $(basename "$0") [-lLqc] [-k keyword] topic [subtopic]" 1>&2
+	echo "conveniency wrapper for cheat.sh" 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-l, list available topics or available cheatsheets for a specified topic." 1>&2
+	echo "-L, learn about specified topic." 1>&2
+	echo "-q, quiet mode, shows code only and not comments." 1>&2
+	echo "-k, search for a keyword on its own or on a specified topic/subtopic" 1>&2
+	echo "-c, cycle through stackoverflow answers. stop with ctrl+c q" 1>&2
+}
 
-#while getopts ":th" o; do
-#    case "${o}" in
-#        t)
-#	    printnotes=1    
-#	    getopts_get_optional_argument "$@"
-#	    hour=$OPTARG
-#            ;;
-#        h)
-#            usage
-#	    exit 0
-#            ;;
-#        *)
-#            usage
-#	    exit 1
-#            ;;
-#    esac
-#done
-#shift $((OPTIND-1))
+QUIET=""
+SEARCH=0
+LIST=0
+KEYWORD=""
+SUBTOPIC=""
+CYCLE=0
+while getopts ":hlLqk:c" o; do
+    case "${o}" in
+        l)
+						LIST=1
+						SUBTOPIC=":list"
+            ;;
+				L)
+						SUBTOPIC=":learn"
+						;;
+				q)
+						QUIET="Q"
+						;;
+				k)
+						SEARCH=1
+						KEYWORD="~$OPTARG"
+						;;
+				c)
+						CYCLE=1
+						;;
+        h)
+            usage
+	    			exit 0
+            ;;
+        *)
+            usage
+	    			exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
 
-topic="$1"
-shift 1
-query=$(echo "$@" | tr " " "+")
+# if not listing or searching, need at least a topic
+if [ $# -lt 1 ] && [ "$LIST" -ne 1 ] && [ "$SEARCH" -ne 1 ] ; then
+	usage
+	exit 1
+fi
 
-if [ -z "$query" ]; then
-	curl "cheat.sh/$topic"
+# get the topic if present
+if [ $# -ge 1 ]; then
+	TOPIC="$1"
+	shift 1
+fi
+
+# if not listing or learning, get the subtopic
+if [ -z "$SUBTOPIC" ]; then
+	SUBTOPIC=$(echo "$@" | tr " " "+")
+fi
+
+QUERY_STRING=""
+if [ -z "$SUBTOPIC" ]; then
+	# only topic query
+	QUERY_STRING="$TOPIC$KEYWORD"
 else
-	curl "cheat.sh/$topic/$query"
+	if [ "$LIST" -eq 1 ] && [ -z "$TOPIC" ]; then
+		# listing all topics
+		QUERY_STRING="$SUBTOPIC"
+	else
+		# complete query
+		QUERY_STRING="$TOPIC/$SUBTOPIC$KEYWORD"
+	fi
+fi
+
+if [ "$CYCLE" -eq 0 ]; then
+	curl -s "https://cheat.sh/$QUERY_STRING?$QUIET"
+else
+	i=0
+	while true; do
+		curl -s "https://cheat.sh/$QUERY_STRING/$i?$QUIET" | less
+		i=$((i+1))
+	done
 fi
