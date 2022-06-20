@@ -24,22 +24,22 @@ upgradeopt=""
 autoremoveopt=""
 
 while getopts ":hyY" o; do
-    case "${o}" in
-        y)
-	    upgradeopt="-y"
-            ;;
-	Y)
-	    autoremoveopt="-y"
-	    ;;
-        h)
-            usage
-	    exit 0
-            ;;
-        *)
-            usage
-	    exit 1
-            ;;
-    esac
+	case "${o}" in
+		y)
+			upgradeopt="-y"
+			;;
+		Y)
+			autoremoveopt="-y"
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
 done
 shift $((OPTIND-1))
 
@@ -47,7 +47,7 @@ shift $((OPTIND-1))
 EUID=$(id -u)
 if [ "$EUID" -ne 0 ]; then
 	echo "Please run as root."
-  exit 1
+	exit 1
 fi
 
 printf "\n%bUpgrading and autoremoving apt packages%b\n" "$GREEN" "$NC"

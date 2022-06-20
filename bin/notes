@@ -11,14 +11,14 @@
 # adapted from https://stackoverflow.com/a/57295993
 getopts_get_optional_argument() {
 	next_token=""
-  eval next_token="\${$OPTIND}"
+	eval next_token="\${$OPTIND}"
 	nt_first_char="$(printf "%s" "$next_token" | cut -c1)"
-  if [ -n "$next_token" ] && [ "$nt_first_char" != "-" ]; then
-    OPTIND=$((OPTIND + 1))
-    OPTARG=$next_token
-  else
-    OPTARG=""
-  fi
+	if [ -n "$next_token" ] && [ "$nt_first_char" != "-" ]; then
+		OPTIND=$((OPTIND + 1))
+		OPTARG=$next_token
+	else
+		OPTARG=""
+	fi
 }
 
 usage() { 
@@ -34,21 +34,21 @@ notefile="$HOME/.braindump"
 printnotes=0
 
 while getopts ":th" o; do
-    case "${o}" in
-        t)
-	    printnotes=1    
-	    getopts_get_optional_argument "$@"
-	    hour=$OPTARG
-            ;;
-        h)
-            usage
-	    exit 0
-            ;;
-        *)
-            usage
-	    exit 1
-            ;;
-    esac
+	case "${o}" in
+		t)
+			printnotes=1    
+			getopts_get_optional_argument "$@"
+			hour=$OPTARG
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
 done
 shift $((OPTIND-1))
 

@@ -22,33 +22,33 @@ KEYWORD=""
 SUBTOPIC=""
 CYCLE=0
 while getopts ":hlLqk:c" o; do
-    case "${o}" in
-        l)
-						LIST=1
-						SUBTOPIC=":list"
-            ;;
-				L)
-						SUBTOPIC=":learn"
-						;;
-				q)
-						QUIET="Q"
-						;;
-				k)
-						SEARCH=1
-						KEYWORD="~$OPTARG"
-						;;
-				c)
-						CYCLE=1
-						;;
-        h)
-            usage
-	    			exit 0
-            ;;
-        *)
-            usage
-	    			exit 1
-            ;;
-    esac
+	case "${o}" in
+		l)
+			LIST=1
+			SUBTOPIC=":list"
+			;;
+		L)
+			SUBTOPIC=":learn"
+			;;
+		q)
+			QUIET="Q"
+			;;
+		k)
+			SEARCH=1
+			KEYWORD="~$OPTARG"
+			;;
+		c)
+			CYCLE=1
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
 done
 shift $((OPTIND-1))
 

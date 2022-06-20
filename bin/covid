@@ -15,22 +15,22 @@ usage() {
 SOURCE=2
 TOP=""
 while getopts ":hs:n:" o; do
-    case "${o}" in
-        s)
-						SOURCE="$OPTARG"
-            ;;
-				n)
-						TOP="$OPTARG"
-						;;
-        h)
-            usage
-	    			exit 0
-            ;;
-        *)
-            usage
-	    			exit 1
-            ;;
-    esac
+	case "${o}" in
+		s)
+			SOURCE="$OPTARG"
+			;;
+		n)
+			TOP="$OPTARG"
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
 done
 shift $((OPTIND-1))
 
@@ -41,7 +41,7 @@ fi
 
 QUERY="${COUNTRY}?source=${SOURCE}"
 
-if [ ! -z "$TOP" ]; then
+if [ -n "$TOP" ]; then
 	QUERY="${QUERY}&top=${TOP}"
 fi
 

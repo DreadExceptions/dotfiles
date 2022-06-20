@@ -20,35 +20,35 @@ CATEGORY=""
 PAGE=1
 COUNTRY=$(curl -s ifconfig.co/country-iso | tr "[:upper:]" "[:lower:]")
 while getopts ":hcC:k:p:" o; do
-    case "${o}" in
-        c)
-						CYCLE=1
-            ;;
-				C)
-						CATEGORY="${OPTARG}"
-						;;
-				k)
-						COUNTRY="$OPTARG"
-						;;
-				p)
-						PAGE="$OPTARG"
-						;;
-        h)
-            usage
-	    			exit 0
-            ;;
-        *)
-            usage
-	    			exit 1
-            ;;
-    esac
+	case "${o}" in
+		c)
+			CYCLE=1
+			;;
+		C)
+			CATEGORY="${OPTARG}"
+			;;
+		k)
+			COUNTRY="$OPTARG"
+			;;
+		p)
+			PAGE="$OPTARG"
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
 done
 shift $((OPTIND-1))
 
 QUERY_STRING=$(echo "$@" | tr " " "+")
 
 # add category if present
-if [ ! -z "$CATEGORY" ]; then
+if [ -n "$CATEGORY" ]; then
 	QUERY_STRING="${QUERY_STRING},category=${CATEGORY}"
 fi
 
