@@ -1,0 +1,63 @@
+#!/bin/sh
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# conveniency wrapper for getnews.tech
+#----------------------------------------
+
+usage() { 
+	echo "Usage: $(basename "$0") [-c] [-C category] [-k country] [-p n] query" 1>&2
+	echo "conveniency wrapper for cheat.sh" 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-c, cycle through pages. ctrl-c q to quit." 1>&2
+	echo "-C, specify category of news to fetch." 1>&2
+	echo "    (business, entertainment, general, health, science, sports, technology)" 1>&2
+	echo "-k, specify country code." 1>&2
+	echo "-p, specify number of page to fetch." 1>&2
+}
+
+CYCLE=0
+CATEGORY=""
+PAGE=1
+COUNTRY=$(curl -s ifconfig.co/country-iso | tr "[:upper:]" "[:lower:]")
+while getopts ":hcC:k:p:" o; do
+    case "${o}" in
+        c)
+						CYCLE=1
+            ;;
+				C)
+						CATEGORY="${OPTARG}"
+						;;
+				k)
+						COUNTRY="$OPTARG"
+						;;
+				p)
+						PAGE="$OPTARG"
+						;;
+        h)
+            usage
+	    			exit 0
+            ;;
+        *)
+            usage
+	    			exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+QUERY_STRING=$(echo "$@" | tr " " "+")
+
+# add category if present
+if [ ! -z "$CATEGORY" ]; then
+	QUERY_STRING="${QUERY_STRING},category=${CATEGORY}"
+fi
+
+# perform request
+curl -s "${COUNTRY}.getnews.tech/$QUERY_STRING,p=${PAGE}" | sed 's/getnews\.tech/http\:\/\/getnews\.tech/' | less
+if [ "$CYCLE" -eq 1 ]; then
+	i=$((PAGE+1))
+	while true; do
+		curl -s "${COUNTRY}.getnews.tech/$QUERY_STRING,p=${i}" | sed 's/getnews\.tech/http\:\/\/getnews\.tech/' | less
+		i=$((i+1))
+	done
+fi

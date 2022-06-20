@@ -1,0 +1,48 @@
+#!/bin/sh
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# conveniency wrapper for corona-stats.online
+#----------------------------------------
+
+usage() { 
+	echo "Usage: $(basename "$0") [-s n] [-n n] [country]" 1>&2
+	echo "conveniency wrapper for corona-stats.online" 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-s, switch between sources, default is 2. (1=Johns Hopkins Data API, 2=WorldoMeters Data API)" 1>&2
+	echo "-n, list only top n countries." 1>&2
+}
+
+SOURCE=2
+TOP=""
+while getopts ":hs:n:" o; do
+    case "${o}" in
+        s)
+						SOURCE="$OPTARG"
+            ;;
+				n)
+						TOP="$OPTARG"
+						;;
+        h)
+            usage
+	    			exit 0
+            ;;
+        *)
+            usage
+	    			exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+COUNTRY=""
+if [ $# -ge 1 ]; then
+	COUNTRY="$1"
+fi
+
+QUERY="${COUNTRY}?source=${SOURCE}"
+
+if [ ! -z "$TOP" ]; then
+	QUERY="${QUERY}&top=${TOP}"
+fi
+
+curl -s "https://corona-stats.online/${QUERY}" | head -n -10

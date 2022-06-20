@@ -1,0 +1,86 @@
+#!/bin/sh
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# conveniency wrapper for rate.sx
+# TODO:
+# - improve options description
+# - maybe add some checks
+#----------------------------------------
+
+usage() { 
+	echo "Usage: $(basename "$0") [-n n] [-f c1] [-t c2] [-c c] [-b begin] [-e end] [currency] [amount]" 1>&2
+	echo "conveniency wrapper for rate.sx" 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-n, shows top n coins (default=10)." 1>&2
+	echo "-f, convert from currency." 1>&2
+	echo "-t, convert to currency (default=base currency)" 1>&2
+	echo "-c, set base currency (default=usd)" 1>&2
+	echo "-b, beginning time of graph." 1>&2
+	echo "-e, end time of graph (default=now)." 1>&2
+}
+
+TOP=10
+BASE_CURRENCY="usd"
+FROM=""
+END="now"
+while getopts ":hn:f:t:c:b:e:" o; do
+    case "${o}" in
+        n)
+						TOP="${OPTARG}"
+            ;;
+				f)
+						FROM="${OPTARG}"
+						;;
+				t)
+						TO="${OPTARG}"
+						;;
+				c)
+						BASE_CURRENCY="${OPTARG}"
+						;;
+				b)
+						BEGIN="${OPTARG}"
+						;;
+				e)
+						END="${OPTARG}"
+						;;
+        h)
+            usage
+	    			exit 0
+            ;;
+        *)
+            usage
+	    			exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "$TO" ]; then
+	TO="$BASE_CURRENCY"
+fi
+
+OPTIONS="F"
+
+# if no arguments, show ranking
+if [ $# -eq 0 ]; then
+	OPTIONS="${OPTIONS}&n=${TOP}"
+	curl -s "${TO}.rate.sx/?${OPTIONS}" | tail -n +7 
+	exit 0
+fi
+
+# if from is set, conversion
+if [ ! -z "$FROM" ]; then
+	AMOUNT="$1"
+	QUERY="${AMOUNT}${FROM}"
+	curl -s "${TO}.rate.sx/${QUERY}?${OPTIONS}" | tr "\n" " "
+	echo "$TO"
+	exit 0
+fi
+
+# if begin is set, graph
+if [ ! -z "$BEGIN" ]; then
+	COIN="$1"
+	QUERY="${COIN}@${BEGIN}..${END}"
+	curl -s "${TO}.rate.sx/${QUERY}?${OPTIONS}" | head -n -2
+	exit 0
+fi
