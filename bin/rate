@@ -8,28 +8,24 @@
 #----------------------------------------
 
 usage() { 
-	echo "Usage: $(basename "$0") [-n n] [-f c1] [-t c2] [-c c] [-b begin] [-e end] [currency] [amount]" 1>&2
+	echo "Usage: $(basename "$0") [-n n] [-t c] [-c c] [-b begin] [-e end] [currency] [amount currency]" 1>&2
 	echo "conveniency wrapper for rate.sx" 1>&2
 	echo "-h, shows this help." 1>&2
 	echo "-n, shows top n coins (default=10)." 1>&2
-	echo "-f, convert from currency." 1>&2
 	echo "-t, convert to currency (default=base currency)" 1>&2
-	echo "-c, set base currency (default=usd)" 1>&2
-	echo "-b, beginning time of graph." 1>&2
+	echo "-c, set base currency (default=usd)." 1>&2
+	echo "-b, beginning time of graph (default=30d)." 1>&2
 	echo "-e, end time of graph (default=now)." 1>&2
 }
 
 TOP=10
 BASE_CURRENCY="usd"
-FROM=""
+BEGIN="30d"
 END="now"
-while getopts ":hn:f:t:c:b:e:" o; do
+while getopts ":hn:t:c:b:e:" o; do
 	case "${o}" in
 		n)
 			TOP="${OPTARG}"
-			;;
-		f)
-			FROM="${OPTARG}"
 			;;
 		t)
 			TO="${OPTARG}"
@@ -68,19 +64,20 @@ if [ $# -eq 0 ]; then
 	exit 0
 fi
 
-# if from is set, conversion
-if [ -n "$FROM" ]; then
-	AMOUNT="$1"
-	QUERY="${AMOUNT}${FROM}"
-	curl -s "${TO}.rate.sx/${QUERY}?${OPTIONS}" | tr "\n" " "
-	echo "$TO"
-	exit 0
-fi
-
-# if begin is set, graph
-if [ -n "$BEGIN" ]; then
+# if one argument, show graph for coin
+if [ $# -eq 1 ]; then
 	COIN="$1"
 	QUERY="${COIN}@${BEGIN}..${END}"
 	curl -s "${TO}.rate.sx/${QUERY}?${OPTIONS}" | head -n -2
+	exit 0
+fi
+
+# if 2 arguments, conversion
+if [ $# -eq 2 ]; then
+	AMOUNT="$1"
+	FROM="$2"
+	QUERY="${AMOUNT}${FROM}"
+	curl -s "${TO}.rate.sx/${QUERY}?${OPTIONS}" | tr "\n" " "
+	echo "$TO"
 	exit 0
 fi
