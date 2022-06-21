@@ -1,3 +1,8 @@
+set history=200
+set ruler
+set display=truncate
+set incsearch
+set hlsearch
 syntax on
 
 " plugins
