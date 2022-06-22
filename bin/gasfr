@@ -1,0 +1,110 @@
+#!/bin/bash
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# gas price analyzer for france
+# TODO:
+# - better explaination of fuel types
+# - possibility to specify km radius from location instead of city
+# - check more convenient gas station in radius of x km 
+#		- aiming to answer the question "is it worth it to drive farther to a cheaper station?
+# - add checks for non-existant city/fuel type
+#----------------------------------------
+
+GREEN="\033[1;32m"
+NC="\033[0m"
+
+usage() { 
+	echo "Usage: $(basename "$0") -m [-t type] city" 1>&2
+	echo "gas price analyzer for france." 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-m, shows only the cheapest station." 1>&2
+	echo "-t, sets the fuel type (Gazole, E10, SP98, GPLc, E85, etc.)." 1>&2
+	echo "    case sensitive. default=Gazole" 1>&2
+}
+
+MIN=0
+TYPE="Gazole"
+while getopts ":hmt:" o; do
+	case "${o}" in
+		m)
+			MIN=1
+			;;
+		t)
+			TYPE="${OPTARG}"
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
+done
+shift $((OPTIND-1))
+
+# check if city present
+if [ $# -lt 1 ]; then
+	usage
+	exit 1
+fi
+
+# create directory for temporary files
+TMPDIR=$(mktemp -d)
+#echo "storing tmp files in $TMPDIR" 1>&2
+
+# collect specified city
+CITY=$(echo "$@" | tr "[:upper:]" "[:lower:]")
+
+# collect stations of that city
+curl -s --output - "https://donnees.roulez-eco.fr/opendata/instantane" | gzip -d | xmllint --xpath "/pdv_liste/pdv[ville[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='${CITY}']]" - | grep -i -e "adresse" -e "prix" | sed -r -e "s/^\ *//" -e "s/<adresse>//" -e "s/<\/adresse>//" -e 's/<prix nom="(.*)" id="(.*)" maj="(.*)" valeur="(.*)"\/>/|\1 \4/' > "${TMPDIR}/stations"
+
+# create map of stations
+declare -A STATIONS
+STATION_NAME=""
+while read -r LINE; do
+	# check if station name or price
+	if [[ "${LINE:0:1}" != "|" ]]; then
+		# new station
+		if [ -n "$STATION_NAME" ]; then
+			# save old one as a string if present
+			STATIONS["$STATION_NAME"]=$(typeset -p STATION)
+		fi
+		STATION_NAME="$LINE"
+		# clear data structure
+		unset STATION
+		declare -A STATION
+	else
+		read -r GAS_TYPE GAS_PRICE <<< $(echo "$LINE" | tr -d "|")
+		STATION["$GAS_TYPE"]="$GAS_PRICE"
+	fi
+done < "${TMPDIR}/stations"
+
+#if not asked to find the cheapest, print all
+if [ "$MIN" -eq 0 ]; then
+	for NAME in "${!STATIONS[@]}"; do
+		printf "%b%s%b\n" "$GREEN" "$NAME" "$NC"
+		echo "${STATIONS["$NAME"]}" | sed "s/declare -A STATION=//" | tr -d "()\"[]" | tr " " "\n" | sed "s/=/ = /g"
+	done
+fi
+
+# print only cheapest station for certain type of fuel
+MINVALUE="1000"
+MINNAME=""
+if [ "$MIN" -eq 1 ]; then
+	for NAME in "${!STATIONS[@]}"; do
+		unset STATION
+		eval "${STATIONS[$NAME]}"
+		for FT in "${!STATION[@]}"; do
+			if [[ "$FT" == "$TYPE" ]]; then
+				if (( $(echo "${STATION[$FT]} < ${MINVALUE}" | bc -l) )); then
+					MINNAME="$NAME"
+					MINVALUE="${STATION["$FT"]}"
+				fi
+			fi
+		done
+	done	
+	printf "%b%s%b\n" "$GREEN" "$MINNAME" "$NC"
+	echo "$TYPE = $MINVALUE"
+fi

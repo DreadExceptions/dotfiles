@@ -1,6 +1,33 @@
 ;; start in fullscreen
 (toggle-frame-fullscreen)
 
+;; Initialize package sources
+(require 'package)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+
+(package-initialize)
+(unless package-archive-contents
+ (package-refresh-contents))
+
+;; install use-package if not present
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
+
+;; ensure all packages
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+;; set the theme
+(use-package underwater-theme)
+(load-theme 'underwater t)
+
+;; highlight current line
+(global-hl-line-mode 1)
+(set-face-underline 'hl-line nil)
+
 ;; don't show the splash screen
 (setq inhibit-startup-message t)
 
@@ -24,14 +51,8 @@
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-;; set the theme
-(load-theme 'modus-vivendi t)
-
 ;; set font 
 (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 200)  
-
-;; highlight current line
-(global-hl-line-mode 1)
 
 ;; remember recently edited files
 (recentf-mode 1)
@@ -50,25 +71,6 @@
 
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
-;; Initialize package sources
-(require 'package)
-
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
-
-(package-initialize)
-(unless package-archive-contents
- (package-refresh-contents))
-
-;; install use-package if not present
-(unless (package-installed-p 'use-package)
-   (package-install 'use-package))
-
-;; ensure all packages
-(require 'use-package)
-(setq use-package-always-ensure t)
 
 ;; ivy completion framework
 (use-package ivy)
