@@ -1,0 +1,73 @@
+#!/bin/bash
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# converts a folder of mindforger markdown 
+# files to an org-roam format
+#----------------------------------------
+
+usage() {
+	echo "Usage: $(basename "$0") mindforger_repo" 1>&2
+}
+
+generate_id(){
+	ID="$(echo $RANDOM | md5sum | head -c 8)-$(echo $RANDOM | md5sum | head -c 4)-$(echo $RANDOM | md5sum | head -c 4)-$(echo $RANDOM | md5sum | head -c 4)-$(echo $RANDOM | md5sum | head -c 12)"
+}
+
+create_base_org_file(){
+	FILENAME="${OUT_FOLDER}/${CREATION_DATE}-$(echo $TITLE | tr " " "_").org"
+	echo -e ":PROPERTIES:\n:ID:       ${ID}\n:END:\n#+title: ${TITLE}\n" > "${FILENAME}"
+}
+handle_metadata(){
+	N=$(echo $LINE | cut -d " " -f 1 | tr -d "\n" | wc -c)
+	TITLE=$(echo $LINE | sed "s/<!--.*-->//" | tr -d "#()/" | sed -e "s/^[[:space:]]*//" -e "s/[[:space:]]*$//"i | tr "-" "_")
+	CREATION_DATE=$(echo $LINE | grep -o "created: [^;]*;" | tr -d "created: ;-")
+	generate_id
+	create_base_org_file 
+}
+
+link_to_previous_level(){
+	PREVIOUS_LEVEL=$((N-1))
+	echo "- [[id:$ID][$TITLE]]" >> "${LEVELS[${PREVIOUS_LEVEL}]}"
+}
+
+if [ "$#" -ne 1 ]; then
+	usage
+	exit 1
+fi
+
+REPO_NAME="$1"
+MEMORY_FOLDER="${PWD}/${REPO_NAME}/memory"
+
+OUT_FOLDER=$(mktemp -d)
+echo "Storing converted org-files in ${OUT_FOLDER}" 2>&1
+
+# file for whole repo
+CREATION_DATE=$(date +"%Y%m%d%H%M%S")
+TITLE=$(echo $REPO_NAME | tr "-" "_")
+generate_id
+create_base_org_file
+LEVELS=($FILENAME)
+
+for FILE in ${MEMORY_FOLDER}/*.md; do
+	FIRST_LINE=1
+	while read -r LINE; do
+		# check if it's a metadata line or content one
+		if [[ "$LINE" =~ ^\ *#+.*\<\!--.*--\>\ *$ ]]; then
+			# deal with notebook name 
+			if [ "$FIRST_LINE" -eq 1 ]; then
+				handle_metadata
+				LEVELS[$N]="${FILENAME}"
+				link_to_previous_level
+				FIRST_LINE=0
+			else
+				handle_metadata
+				N=$((N+1))
+				LEVELS[$N]="${FILENAME}"
+				link_to_previous_level
+			fi
+		else
+			#content line
+			echo "$LINE" | tr "#" "*" >> $FILENAME
+		fi
+	done<${FILE};
+done
