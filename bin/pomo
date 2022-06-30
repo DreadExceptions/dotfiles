@@ -1,0 +1,39 @@
+#!/bin/sh
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# simple pomodoro timer
+# adapted from https://github.com/sayanarijit/pomo
+# TODO:
+# - add icon in notification
+# - add information on how many pomodoros done in notification
+#	- clear notification automatically
+#----------------------------------------
+
+usage() { 
+	echo "Usage: $(basename "$0") workmin breakmin" 1>&2
+	echo "simple pomodoro timer" 1>&2
+}
+
+if [ $# -lt 2 ]; then
+	usage
+	exit 1
+fi
+
+WORKMIN="$1"
+BREAKMIN="$2"
+WORKSEC=$((WORKMIN * 60))
+BREAKSEC=$((BREAKMIN * 60))
+BREAKMSG="Time to take a break"
+WORKMSG="Time to start working"
+
+i=0
+while true; do
+	echo "pomodoro #$i: $(date '+%H:%M')"
+	paplay /usr/share/sounds/Yaru/stereo/complete.oga
+	notify-send -u critical -t 0 -a pomo "$WORKMSG"
+	sleep "$WORKSEC"
+	paplay /usr/share/sounds/Yaru/stereo/complete.oga
+	notify-send -u critical -t 0 -a pomo "$BREAKMSG"
+	sleep "$BREAKSEC"
+	i=$((i+1))
+done

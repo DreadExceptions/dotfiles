@@ -14,12 +14,12 @@ generate_id(){
 }
 
 create_base_org_file(){
-	FILENAME="${OUT_FOLDER}/${CREATION_DATE}-$(echo $TITLE | tr " " "_").org"
+	FILENAME="${OUT_FOLDER}/${CREATION_DATE}-$(echo $TITLE | tr " -" "_").org"
 	echo -e ":PROPERTIES:\n:ID:       ${ID}\n:END:\n#+title: ${TITLE}\n" > "${FILENAME}"
 }
 handle_metadata(){
 	N=$(echo $LINE | cut -d " " -f 1 | tr -d "\n" | wc -c)
-	TITLE=$(echo $LINE | sed "s/<!--.*-->//" | tr -d "#()/" | sed -e "s/^[[:space:]]*//" -e "s/[[:space:]]*$//"i | tr "-" "_")
+	TITLE=$(echo $LINE | sed "s/<!--.*-->//" | tr -d "#()/" | sed -e "s/^[[:space:]]*//" -e "s/[[:space:]]*$//"i)
 	CREATION_DATE=$(echo $LINE | grep -o "created: [^;]*;" | tr -d "created: ;-")
 	generate_id
 	create_base_org_file 

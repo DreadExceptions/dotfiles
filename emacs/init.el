@@ -170,9 +170,9 @@
 
 (defun efs/org-font-setup ()
   ;; Replace list hyphen with dot
-  (font-lock-add-keywords 'org-mode
-                          '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  ;(font-lock-add-keywords 'org-mode
+  ;                        '(("^ *\\([-]\\) "
+  ;                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
   ;; Set faces for heading levels
   (dolist (face '((org-level-1 . 1.2)
@@ -204,8 +204,9 @@
 (use-package org-bullets
   :after org
   :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  ;:custom
+  ;(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))
+  )
 
 (defun efs/org-mode-visual-fill ()
   (setq visual-fill-column-width 100
