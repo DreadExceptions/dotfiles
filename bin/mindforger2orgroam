@@ -1,8 +1,10 @@
 #!/bin/bash
 #----------------------------------------
 # Author: Lorenzo Alluminio
-# converts a folder of mindforger markdown 
-# files to an org-roam format
+# converts a folder of mindforger markdown
+# files to an org-roam format.
+# new mindforger releases changed the note format
+# so this script might not work.
 #----------------------------------------
 
 usage() {
@@ -39,7 +41,7 @@ REPO_NAME="$1"
 MEMORY_FOLDER="${PWD}/${REPO_NAME}/memory"
 
 OUT_FOLDER=$(mktemp -d)
-echo "Storing converted org-files in ${OUT_FOLDER}" 2>&1
+echo "Storing converted org-files in ${OUT_FOLDER}"
 
 # file for whole repo
 CREATION_DATE=$(date +"%Y%m%d%H%M%S")
@@ -49,6 +51,7 @@ create_base_org_file
 LEVELS=($FILENAME)
 
 for FILE in ${MEMORY_FOLDER}/*.md; do
+	echo $FILE
 	FIRST_LINE=1
 	while read -r LINE; do
 		# check if it's a metadata line or content one
