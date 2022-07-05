@@ -3,11 +3,10 @@
 # Author: Lorenzo Alluminio
 # gas price analyzer for france
 # TODO:
-# - better explaination of fuel types
 # - possibility to specify km radius from location instead of city
 # - check more convenient gas station in radius of x km 
 #		- aiming to answer the question "is it worth it to drive farther to a cheaper station?
-# - add checks for non-existant city/fuel type
+# - add proper checks for non-existant city/fuel type
 #----------------------------------------
 
 GREEN="\033[1;32m"
@@ -17,13 +16,12 @@ usage() {
 	echo "Usage: $(basename "$0") -m [-t type] city" 1>&2
 	echo "gas price analyzer for france." 1>&2
 	echo "-h, shows this help." 1>&2
-	echo "-m, shows only the cheapest station." 1>&2
-	echo "-t, sets the fuel type (Gazole, E10, SP98, GPLc, E85, etc.)." 1>&2
-	echo "    case sensitive. default=Gazole" 1>&2
+	echo "-m, shows only the cheapest station. Default fuel type is set to Gazole." 1>&2
+	echo "-t, sets the fuel type. Case sensitive." 1>&2
+	echo "    Gazole (Diesel), SP98 (Sans Plomb 98 Octane), SP95, GPLc, E10 (Ethanol 10% - Gasoline 90%), E85" 1>&2
 }
 
 MIN=0
-TYPE="Gazole"
 while getopts ":hmt:" o; do
 	case "${o}" in
 		m)
@@ -85,13 +83,21 @@ done < "${TMPDIR}/stations"
 if [ "$MIN" -eq 0 ]; then
 	for NAME in "${!STATIONS[@]}"; do
 		printf "%b%s%b\n" "$GREEN" "$NAME" "$NC"
-		echo "${STATIONS["$NAME"]}" | sed "s/declare -A STATION=//" | tr -d "()\"[]" | tr " " "\n" | sed "s/=/ = /g"
+		if [ -z "$TYPE" ]; then
+			echo "${STATIONS["$NAME"]}" | sed "s/declare -A STATION=//" | tr -d "()\"[]" | tr " " "\n" | sed "s/=/ = /g"
+		else
+			echo "${STATIONS["$NAME"]}" | sed "s/declare -A STATION=//" | tr " " "\n" | grep --color=never "$TYPE" | tr -d '"[]' | sed "s/=/ = /"  
+			echo 
+		fi
 	done
 fi
 
 # print only cheapest station for certain type of fuel
 MINVALUE="1000"
 MINNAME=""
+if [ -z "$TYPE" ]; then
+	TYPE="Gazole"
+fi
 if [ "$MIN" -eq 1 ]; then
 	for NAME in "${!STATIONS[@]}"; do
 		unset STATION
@@ -105,6 +111,10 @@ if [ "$MIN" -eq 1 ]; then
 			fi
 		done
 	done	
-	printf "%b%s%b\n" "$GREEN" "$MINNAME" "$NC"
-	echo "$TYPE = $MINVALUE"
+	if [ "$MINVALUE" -eq 1000 ]; then
+		echo "Non supported fuel value"
+	else
+		printf "%b%s%b\n" "$GREEN" "$MINNAME" "$NC"
+		echo "$TYPE = $MINVALUE"
+	fi
 fi

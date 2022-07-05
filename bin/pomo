@@ -1,18 +1,82 @@
-#!/bin/sh
+#!/bin/bash
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # simple pomodoro timer
 # adapted from https://github.com/sayanarijit/pomo
+# Tomato icons created by Pixel perfect - Flaticon 
+# sounds by https://github.com/akx/Notifications 
+# notification tricks 
+#   - https://github.com/vlevit/notify-send.sh/blob/master/notify-send.sh
+# 	- https://sylvaindurand.org/update-notifications-with-libnotify/ 
 # TODO:
-# - add icon in notification
-# - add information on how many pomodoros done in notification
-#	- clear notification automatically
+# - check that urgency is a number 0~2
 #----------------------------------------
 
 usage() { 
-	echo "Usage: $(basename "$0") workmin breakmin" 1>&2
+	echo "Usage: $(basename "$0") [-q] [-u urgency] workmin breakmin" 1>&2
 	echo "simple pomodoro timer" 1>&2
+	echo "-h, shows this help." 1>&2
+	echo "-q, quiet mode. No output on screen" 1>&2
+	echo "-s, silent mode. No sound." 1>&2
+	echo "-u, urgency of notifications (0=low, 1=normal, 2=critical)" 1>&2
+	echo "    default=2" 1>&2
 }
+
+notification_send(){
+	# first 0 is replace-id
+	# [] is actions
+	# {} is hints
+	# second 0 is expiry-time (ignored by gnome)
+	ID=$(gdbus call \
+    --session \
+    --dest org.freedesktop.Notifications \
+    --object-path /org/freedesktop/Notifications \
+    --method org.freedesktop.Notifications.Notify \
+    "pomo" \
+    "0" \
+    "$ICON" \
+    "$TITLE" \
+    "$CONTENT" \
+    "[]" \
+    "{'urgency':<byte $URGENCY>}" \
+		"0" | sed "s/(uint32 \([0-9]\+\),)/\1/g")
+	return 0
+}
+
+notification_close(){
+	gdbus call \
+    --session \
+    --dest org.freedesktop.Notifications \
+    --object-path /org/freedesktop/Notifications \
+		--method org.freedesktop.Notifications.CloseNotification \
+		"$ID" >/dev/null
+}
+
+QUIET=0
+SILENT=0
+URGENCY="2"
+while getopts ":hqsu:" o; do
+	case "${o}" in
+		q)
+			QUIET=1
+			;;
+		s)
+			SILENT=1
+			;;
+		u)
+			URGENCY=${OPTARG}
+			;;
+		h)
+			usage
+			exit 0
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
+done
+shift $((OPTIND-1))
 
 if [ $# -lt 2 ]; then
 	usage
@@ -25,15 +89,32 @@ WORKSEC=$((WORKMIN * 60))
 BREAKSEC=$((BREAKMIN * 60))
 BREAKMSG="Time to take a break"
 WORKMSG="Time to start working"
+ICON="${HOME}/dotfiles/icons/tomato.png"
+START_SOUND="${HOME}/dotfiles/sounds/Polite.ogg"
+END_SOUND="${HOME}/dotfiles/sounds/Information_Bell.ogg"
+NOTIFICATION_EXPIRY_SEC=3
 
 i=0
 while true; do
-	echo "pomodoro #$i: $(date '+%H:%M')"
-	paplay /usr/share/sounds/Yaru/stereo/complete.oga
-	notify-send -u critical -t 0 -a pomo "$WORKMSG"
+	# work period
+	STARTWORKDATE=$(date "+%H:%M")
+	ENDWORKDATE=$(date -d "$WORKMIN mins" "+%H:%M")
+	[ "$QUIET" -eq 0 ] && echo "pomodoro #$i: ${STARTWORKDATE} -> ${ENDWORKDATE}"
+	TITLE="pomo"
+	CONTENT="#$i $WORKMSG"
+	[ "$SILENT" -eq 0 ] && paplay "$START_SOUND" &
+	notification_send && sleep "$NOTIFICATION_EXPIRY_SEC" && notification_close
 	sleep "$WORKSEC"
-	paplay /usr/share/sounds/Yaru/stereo/complete.oga
-	notify-send -u critical -t 0 -a pomo "$BREAKMSG"
+	[ "$SILENT" -eq 0 ] && paplay "$END_SOUND" &
+	
+	# break period
+	STARTBREAKDATE=$(date "+%H:%M")
+	ENDBREAKDATE=$(date -d "$BREAKMIN mins" "+%H:%M")
+	[ "$QUIET" -eq 0 ] && echo "break #$i: ${STARTBREAKDATE} -> ${ENDBREAKDATE}"
+	TITLE="pomo"
+	CONTENT="#$i $BREAKMSG"
+	notification_send && sleep "$NOTIFICATION_EXPIRY_SEC" && notification_close
 	sleep "$BREAKSEC"
+
 	i=$((i+1))
 done
