@@ -216,6 +216,11 @@
 (use-package visual-fill-column
   :hook (org-mode . efs/org-mode-visual-fill))
 
+;show also tags in org-roam-node-find
+(setq org-roam-node-display-template
+  (concat "${title} "
+    (propertize "${tags}" 'face 'org-tag)))
+       
 ;; org-roam config
 
 (use-package org-roam
@@ -253,4 +258,5 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
+
 
