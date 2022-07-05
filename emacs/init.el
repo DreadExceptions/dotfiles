@@ -218,8 +218,8 @@
 
 ;show also tags in org-roam-node-find
 (setq org-roam-node-display-template
-  (concat "${title} "
-    (propertize "${tags}" 'face 'org-tag)))
+  (concat "${title:*} "
+    (propertize "${tags:40}" 'face 'org-tag)))
        
 ;; org-roam config
 
@@ -230,7 +230,7 @@
   (org-roam-capture-templates
    '(("d" "default" plain
       "%?"
-      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags:")
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: ::")
       :unnarrowed t)
      ;("l" "programming language" plain
      ; "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
