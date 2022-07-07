@@ -40,9 +40,11 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 
-;; enable line numbers and column number
+;; font related stuff
+(setq line-spacing 0.1)
+
+;; enable column number
 (column-number-mode)
-(global-display-line-numbers-mode 1)
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
@@ -50,9 +52,6 @@
 		            shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-;; set font 
-(set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 215)  
 
 ;; remember recently edited files
 (recentf-mode 1)
@@ -186,7 +185,7 @@
                   (org-level-6 . 1.0)
                   (org-level-7 . 1.0)
                   (org-level-8 . 1.0)))
-    (set-face-attribute (car face) nil :font "DejaVu Sans Mono" :height (cdr face))))
+    (set-face-attribute (car face) nil :height (cdr face))))
 
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
@@ -212,10 +211,6 @@
   (setq visual-fill-column-width 100
         visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
-
-;; disable visual fill in minibuffer
-;;  (add-hook 'org-roam-node-find-hook
-;;    (visual-fill-column-mode 0))
 
 (use-package visual-fill-column
   :hook (org-mode . la/org-mode-visual-fill))
