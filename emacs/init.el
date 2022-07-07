@@ -1,5 +1,5 @@
 ;; start in fullscreen
-(toggle-frame-fullscreen)
+(set-frame-parameter nil 'fullscreen 'fullboth)
 
 ;; Initialize package sources
 (require 'package)
@@ -47,15 +47,16 @@
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
                 term-mode-hook
-		shell-mode-hook
+		            shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; set font 
-(set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 200)  
+(set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 215)  
 
 ;; remember recently edited files
 (recentf-mode 1)
+(global-set-key (kbd "C-c C-r") 'recentf-open-files)
 
 ;; save minibuffers history
 (savehist-mode 1)
@@ -92,7 +93,7 @@
 	("C-x b" . counsel-ibuffer)
 	("C-x C-f" . counsel-find-file)
 	:map minibuffer-local-map
-	("C-r" . 'counsel-minibuffer-history))
+	("C-c r" . 'counsel-minibuffer-history))
   :config
   (setq ivy-initial-inputs-alist nil)) ;; don't start searches with ^
 
@@ -101,13 +102,19 @@
   :init
   (ivy-rich-mode 1))
 
+;; keybinding to reload config
+(defun reload-dotemacs ()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "<f12>") 'reload-dotemacs)
+
 ;; let's go evil
 
 ;; in some buffers, start in emacs-mode (no evil keybindings)
-(defun rune/evil-hook ()
+(defun la/evil-hook ()
   (dolist (mode '(custom-mode
                   eshell-mode
-		  shell-mode
+		              shell-mode
                   term-mode))
    (add-to-list 'evil-emacs-state-modes mode)))
 
@@ -117,7 +124,7 @@
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   (evil-mode 1)
-  :hook (evil-mode . rune/evil-hook)
+  :hook (evil-mode . la/evil-hook)
   :config
   (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
   ;; the next line sets c+h to delete backward, can be useful to not move fingers from home row
@@ -163,60 +170,57 @@
 
 ;; Org Mode Configuration ------------------------------------------------------
 
-(defun efs/org-mode-setup ()
+(defun la/org-mode-setup ()
   (org-indent-mode)
   (variable-pitch-mode 1)
   (visual-line-mode 1))
 
-(defun efs/org-font-setup ()
-  ;; Replace list hyphen with dot
-  ;(font-lock-add-keywords 'org-mode
-  ;                        '(("^ *\\([-]\\) "
-  ;                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
+(defun la/org-font-setup ()
   ;; Set faces for heading levels
-  (dolist (face '((org-level-1 . 1.2)
+  (with-eval-after-load 'org-faces 
+          (dolist (face '((org-level-1 . 1.2)
                   (org-level-2 . 1.1)
                   (org-level-3 . 1.05)
                   (org-level-4 . 1.0)
-                  (org-level-5 . 1.1)
-                  (org-level-6 . 1.1)
-                  (org-level-7 . 1.1)
-                  (org-level-8 . 1.1))))
-    ;;(set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+                  (org-level-5 . 1.0)
+                  (org-level-6 . 1.0)
+                  (org-level-7 . 1.0)
+                  (org-level-8 . 1.0)))
+    (set-face-attribute (car face) nil :font "DejaVu Sans Mono" :height (cdr face))))
 
   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-  ;;(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-  ;;(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-  ;;(set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
-  ;;(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-  ;;(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-  ;;(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-  ;;(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch))
+  (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+  (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-table nil   :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+  (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+  (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
   )
 
 (use-package org
-  :hook (org-mode . efs/org-mode-setup)
+  :hook (org-mode . la/org-mode-setup)
   :config
   (setq org-ellipsis " ▾")
-  (efs/org-font-setup))
+  (la/org-font-setup))
 
 (use-package org-bullets
   :after org
-  :hook (org-mode . org-bullets-mode)
-  ;:custom
-  ;(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●"))
-  )
+  :hook (org-mode . org-bullets-mode))
 
-(defun efs/org-mode-visual-fill ()
+(defun la/org-mode-visual-fill ()
   (setq visual-fill-column-width 100
         visual-fill-column-center-text t)
   (visual-fill-column-mode 1))
 
-(use-package visual-fill-column
-  :hook (org-mode . efs/org-mode-visual-fill))
+;; disable visual fill in minibuffer
+;;  (add-hook 'org-roam-node-find-hook
+;;    (visual-fill-column-mode 0))
 
-;show also tags in org-roam-node-find
+(use-package visual-fill-column
+  :hook (org-mode . la/org-mode-visual-fill))
+
+;; show also tags in org-roam-node-find
 (setq org-roam-node-display-template
   (concat "${title:*} "
     (propertize "${tags:40}" 'face 'org-tag)))
@@ -226,7 +230,6 @@
 (use-package org-roam
   :custom
   (org-roam-directory "~/cryptomator_mnts/zettelkasten")
-  ;;(org-roam-completion-everywhere t)
   (org-roam-capture-templates
    '(("d" "default" plain
       "%?"
@@ -240,11 +243,8 @@
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
-	 ;;:map org-mode-map
-         ;;("C-M-i" . completion-at-point)
 	 )
-  :config
-  (org-roam-setup))
+  )
 
 ;; org-roam-ui
 (use-package org-roam-ui
@@ -258,5 +258,3 @@
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start t))
-
-
