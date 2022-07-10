@@ -41,6 +41,7 @@
 (menu-bar-mode -1)
 
 ;; font related stuff
+(set-face-attribute 'default nil :height 230)
 (setq line-spacing 0.1)
 
 ;; enable column number

@@ -26,8 +26,9 @@ alias grep="grep --color=always"
 alias bat="batcat"
 alias notes="noglob $HOME/bin/notes"
 alias wtoday="weather -d 1 -n"
-
+alias qrencode="noglob qrencodef"
 # functions
+qrencodef() {printf "$1" | curl -F-=\<- qrenco.de}
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }
 wdx-ls-verbose() {
 for point in $(wdx ls | tr "\n" " "); do
