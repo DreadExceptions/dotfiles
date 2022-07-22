@@ -111,7 +111,7 @@ if [ "$MIN" -eq 1 ]; then
 			fi
 		done
 	done	
-	if [ "$MINVALUE" -eq 1000 ]; then
+	if [ "$MINVALUE" == "1000" ]; then
 		echo "Non supported fuel value"
 	else
 		printf "%b%s%b\n" "$GREEN" "$MINNAME" "$NC"
