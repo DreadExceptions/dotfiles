@@ -231,10 +231,10 @@
       "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: ::")
       :unnarrowed t)
-     ;("l" "programming language" plain
-     ; "* Characteristics\n\n- Family: %?\n- Inspired by: \n\n* Reference:\n\n"
-     ; :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
-     ;:unnarrowed t)
+     ("g" "glossary entry" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: :glossary:")
+     :unnarrowed t)
    ))
   :bind (("C-c n l" . org-roam-buffer-toggle)
          ("C-c n f" . org-roam-node-find)
