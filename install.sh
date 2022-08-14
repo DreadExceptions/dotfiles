@@ -3,6 +3,7 @@
 # Author: Lorenzo Alluminio
 # Installs my base dev / hacking environment
 # TODO:
+# - rust install probably missing a stow command (as well as after atuin install)
 # - add installation of emacs and alacritty from source
 #----------------------------------------
 
@@ -11,6 +12,12 @@
 # tools
 sudo apt update
 sudo apt install git
+sudo apt install gcc
+sudo apt install make
+sudo apt install xclip
+sudo apt install pandoc
+sudo apt install spell
+sudo apt install texlive-full
 sudo apt install curl
 sudo apt install tmux
 sudo apt install neofetch
@@ -48,7 +55,8 @@ stow gdb
 stow git
 stow p10k
 stow profile
-stow source-highlight -t /usr/share/source-highlight/
 stow tmux
 stow vim
 stow zsh
+sudo rm /usr/share/source-highlight/src-hilite-lesspipe.sh
+sudo stow source-highlight -t /usr/share/source-highlight/

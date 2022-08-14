@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 #----------------------------------------
 # Author: Lorenzo Alluminio
 # completely upgrades and cleans my system
@@ -43,38 +43,30 @@ while getopts ":hyY" o; do
 done
 shift $((OPTIND-1))
 
-# check for root
-EUID=$(id -u)
-if [ "$EUID" -ne 0 ]; then
-	echo "Please run as root."
-	exit 1
-fi
-
 printf "\n%bUpgrading and autoremoving apt packages%b\n" "$GREEN" "$NC"
 # upgrade packages
-apt update && apt $upgradeopt upgrade
+sudo apt update && sudo apt $upgradeopt upgrade
 # remove useless dependencies and purge config files
-apt $autoremoveopt autoremove --purge
+sudo apt $autoremoveopt autoremove --purge
 # clean local apt cache
-apt clean
+sudo apt clean
 
 printf "\n%bUpgrading snaps%b\n" "$GREEN" "$NC"
 # SNAP
-snap refresh
+sudo snap refresh
 
 printf "\n%bReconfiguring tuxedo-tomte fixes%b\n" "$GREEN" "$NC"
 # TUXEDO-TOMTE
-tuxedo-tomte reconfigure all
+sudo tuxedo-tomte reconfigure all
 
-# drop sudo to upgrade zinit and print unused gpg keys
+
+# upgrade zinit and print unused gpg keys
 printf "\n%bUpgrading zinit%b\n" "$GREEN" "$NC"
-sudo -u ulla zsh<<_
-source /home/ulla/.zshrc
-zinit self-update
-zinit update
+source ${HOME}/.zshrc
+zini self-update
+zini update
 printf "\n%bUnused GPG keys:%b\n" "$GREEN" "$NC"
 unused-gpg-keys
-_
 
 # list local apt packages
 printf "\n%bThe following local apt packages might need manual updates:%b\n" "$GREEN" "$NC"

@@ -1,10 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 #------------------------------------
 # Author: Lorenzo Alluminio
 # Script that identifies and optionally removes unused trusted gpg keys.
 # These keys are usually added to install software from non-standard repositories (e.g. PPAs)
 # TODO:
 # - what if source repo is not reachable
+# - dunno why but the delete doesn't actually delete keys anymore ¯\_(ツ)_/¯
+# - dunno why but slack key gets detected as unused even if slack is on the system ¯\_(ツ)_/¯
 #------------------------------------
 
 usage() { 
@@ -14,7 +16,6 @@ usage() {
 	echo "-d, deletes unused keys (requires superuser)" 1>&2
 	echo "-h, shows this help" 1>&2
 }
-
 
 backup=0
 delete=0
@@ -55,8 +56,10 @@ sed -e "s/\[.*\] //" "${tmpdir}/sources" | cut -d " " -f 2,3 | sed -E -e "s/\/? 
 
 # for each source, compute the keyid and save it in a file
 while read -r url; do
-	wget -q -T 10 -O "${tmpdir}"/Release.gpg "$url"
-	gpg --list-packets "${tmpdir}"/Release.gpg | grep "keyid" | grep -Eo "[0-9A-F]{16}" >> "${tmpdir}"/sourcekeyidstemp
+	domain=$(echo $url | awk -F/ '{print $3}')
+	#echo "processing ${url}"
+	wget -q -T 10 -O "${tmpdir}"/"${domain}"_Release.gpg "$url"
+	gpg --list-packets "${tmpdir}"/"${domain}"_Release.gpg | grep "keyid" | grep -Eo "[0-9A-F]{16}" >> "${tmpdir}"/sourcekeyidstemp
 done <"${tmpdir}"/releases
 
 # remove duplicate entries
@@ -90,7 +93,7 @@ fi
 if [ $delete -eq 1 ]; then
 	while read -r line; do
 		keyid=$(echo "$line" | cut -d "\"" -f 1)
-		sudo apt-key del "$keyid" >/dev/null
+		sudo apt-key del "$keyid" >/dev/null 
 	done <"${tmpdir}"/unusedkeys
 	echo "deleted keys:"
 fi
