@@ -1,0 +1,45 @@
+#!/bin/bash
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# conveniency wrapper for gocryptfs. Toggles vault state 
+# TODO:
+# - fetch password automagically
+# - more robust vault path retrieval
+#----------------------------------------
+
+usage() { 
+	echo "Usage: $(basename "$0") vault_name" 1>&2
+}
+
+if [ $# -ne 1 ]; then
+	usage
+	exit 1
+fi
+
+VAULT_NAME="$1"
+VAULT_LIST="${HOME}/dotfiles/config/.gocryptfs"
+VAULT_PATH=$(cat "$VAULT_LIST" | cut -d "|" -f 1 | grep --color=never "$VAULT_NAME")
+VAULT_MOUNTPOINT=$(cat "$VAULT_LIST" | cut -d "|" -f 2 | grep --color=never "$VAULT_NAME")
+
+if [ -z "$VAULT_PATH" ] || [ -z "$VAULT_MOUNTPOINT" ]; then
+	echo "cannot find the vault."
+	exit 1
+fi
+
+LINES_PATH=$(echo $VAULT_PATH | tr " " "\n" | wc -l)
+LINES_MOUNTPOINT=$(echo $VAULT_PATH | tr " " "\n" | wc -l)
+
+if [ "$LINES_PATH" -ne 1 ] || [ "$LINES_MOUNTPOINT" -ne 1 ]; then
+	echo "vault name is ambiguous."
+	exit 1
+fi
+
+CHECK=$(df | grep --color=never "$VAULT_MOUNTPOINT")
+
+if [ -z "$CHECK" ]; then
+	echo "mounting $VAULT_PATH at $VAULT_MOUNTPOINT"
+	gocryptfs "$VAULT_PATH" "$VAULT_MOUNTPOINT"
+else
+	echo "unmounting $VAULT_PATH at $VAULT_MOUNTPOINT"
+	fusermount -u "$VAULT_MOUNTPOINT"
+fi
