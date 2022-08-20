@@ -225,7 +225,7 @@
 
 (use-package org-roam
   :custom
-  (org-roam-directory "~/cryptomator_mnts/zettelkasten")
+  (org-roam-directory "~/data/zettelkasten")
   (org-roam-capture-templates
    '(("d" "default" plain
       "%?"

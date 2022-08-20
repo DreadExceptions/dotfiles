@@ -1,0 +1,23 @@
+#!/bin/sh
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# tar.gz a folder using multiple threads and showing a progress bar
+# adapted from: https://gist.github.com/ntrepid8/d1db06d5b51abbc48af78c7afa7b06d5
+#----------------------------------------
+
+usage() { 
+	echo "Usage: $(basename "$0") folder > folder.tar.gz" 1>&2
+}
+
+if [ $# -ne 1 ]; then
+	usage
+	exit 1
+fi
+
+SOURCE="$1"
+
+# get source size
+SOURCE_SIZE=$(du -sk "${SOURCE}" | cut -f1)
+
+# archive and compress
+tar -cf - "${SOURCE}" | pv -p -s "${SOURCE_SIZE}k" | pigz

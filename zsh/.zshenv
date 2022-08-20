@@ -1,9 +1,15 @@
 # rust binaries env
-export RUSTUP_HOME=/opt/rust/rustup
-export CARGO_HOME=/opt/rust/cargo
+export RUSTUP_HOME="/opt/rust/rustup"
+export CARGO_HOME="/opt/rust/cargo"
+
+# go environment variables
+export GOROOT="/opt/go"
+export GOPATH="${HOME}/.go"
+
 # allow syntax highlighting for less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
+
 # set location variable
 export LOCATIONLONG=$(cat $HOME/dotfiles/config/.location | sed '/^#/d' | cut -d "|" -f 1 | tr " " "+")
 export LOCATIONSHORT=$(cat $HOME/dotfiles/config/.location | sed '/^#/d' | cut -d "|" -f 2)
