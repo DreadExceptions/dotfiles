@@ -4,7 +4,7 @@
 # Installs my base dev / hacking environment
 # TODO:
 # - rust install probably missing a stow command (as well as after atuin install)
-# - add installation of emacs and alacritty from source
+# - add installation of emacs, alacritty and gocryptfs from source
 #----------------------------------------
 
 # BE CAREFUL: CONTAINS UNTESTED CODE

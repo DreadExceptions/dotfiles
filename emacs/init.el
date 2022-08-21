@@ -1,6 +1,19 @@
 ;; start in fullscreen
 (set-frame-parameter nil 'fullscreen 'fullboth)
 
+;; backup in one place. flat, no tree structure
+;; http://xahlee.info/emacs/emacs/emacs_set_backup_into_a_directory.html
+;; https://www.emacswiki.org/emacs/BackupDirectory
+(setq 
+  backup-directory-alist '(("" . "~/.emacs.d/backup/"))
+  backup-by-copying t 
+)
+;; autosaves in one place
+(setq auto-save-file-name-transforms `((".*" "~/.emacs.d/backup/", t)))
+
+;; autosaves in one place
+;; https://www.emacswiki.org/emacs/AutoSave 
+
 ;; Initialize package sources
 (require 'package)
 
@@ -262,3 +275,4 @@
 
 ;; enable autosync for the org-roam db
 (org-roam-db-autosync-mode)
+

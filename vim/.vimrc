@@ -26,3 +26,9 @@ let g:netrw_winsize = 15
 
 " customize limelight
 let g:limelight_conceal_ctermfg = 'gray'
+
+" handle backup, swap and undo files
+" https://coderwall.com/p/sdhfug/vim-swap-backup-and-undo-files
+set undodir=~/.vim/undo//
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swp//
