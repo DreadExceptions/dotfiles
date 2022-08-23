@@ -12,4 +12,4 @@
 	cm = commit -m
 [core]
 	editor = vim
-	excludesfile = /home/ulla/.gitignore_global
+	excludesfile = /home/ulla/.config/git/gitignore_global

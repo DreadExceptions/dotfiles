@@ -1,4 +1,3 @@
-alias zshconfig="vim ~/.zshrc && source ~/.zshrc"
 alias ls="ls --color"
 alias ll="ls -alF"
 alias la="ls -A"
@@ -6,7 +5,6 @@ alias l="ls -CF"
 alias sl="ls"    
 alias disableaslr="setarch x86_64 -R /bin/bash"
 alias hg="history | grep"
-alias untar='tar -zxvf'
 alias ..="cd .."
 alias ..2="cd ../.." 
 alias ..3="cd ../../.."
@@ -27,6 +25,7 @@ alias bat="batcat"
 alias notes="noglob $HOME/bin/notes"
 alias wtoday="weather -d 1 -n"
 alias qrencode="noglob qrencodef"
+alias gdb="gdb -n -x $XDG_CONFIG_HOME/gdb/init"
 # functions
 qrencodef() {printf "$1" | curl -F-=\<- qrenco.de}
 path2clip() { readlink -e "$1" | xclip -selection clipboard  }

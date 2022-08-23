@@ -4,7 +4,8 @@
 # Installs my base dev / hacking environment
 # TODO:
 # - rust install probably missing a stow command (as well as after atuin install)
-# - add installation of emacs, alacritty and gocryptfs from source
+# - add installation of emacs, alacritty, gocryptfs, mupdf and glow from source
+# - make sure that the xdg directories are set since I use them
 #----------------------------------------
 
 # BE CAREFUL: CONTAINS UNTESTED CODE
@@ -47,11 +48,11 @@ sudo apt install zsh
 chsh -s $(which zsh)
 
 # stow
-mkdir -p $HOME/bin
 stow alacritty
 stow bash
-stow bin -t $HOME/bin
-stow gdb
+stow bin -t $HOME/.local/bin
+stow emacs -t $XDG_CONFIG_HOME/emacs
+stow gdb -t $XDG_CONFIG_HOME/gdb
 stow git
 stow p10k
 stow profile

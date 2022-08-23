@@ -31,4 +31,4 @@ let g:limelight_conceal_ctermfg = 'gray'
 " https://coderwall.com/p/sdhfug/vim-swap-backup-and-undo-files
 set undodir=~/.vim/undo//
 set backupdir=~/.vim/backup//
-set directory=~/.vim/swp//
+set directory=~/.vim/swap//
