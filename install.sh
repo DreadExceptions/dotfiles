@@ -4,7 +4,7 @@
 # Installs my base dev / hacking environment
 # TODO:
 # - rust install probably missing a stow command (as well as after atuin install)
-# - add installation of emacs, alacritty, gocryptfs, mupdf and glow from source
+# - add installation of emacs, alacritty, gocryptfs, mupdf, glow and tmux from source
 # - make sure that the xdg directories are set since I use them
 #----------------------------------------
 
@@ -20,7 +20,6 @@ sudo apt install pandoc
 sudo apt install spell
 sudo apt install texlive-full
 sudo apt install curl
-sudo apt install tmux
 sudo apt install neofetch
 sudo apt install keepassxc
 sudo apt install vim
@@ -41,6 +40,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 cargo install atuin
 
 # vim
+# TODO fix path
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # zsh
@@ -48,16 +48,17 @@ sudo apt install zsh
 chsh -s $(which zsh)
 
 # stow
+# TODO updates stows for xdg and move to separate script
 stow alacritty
-stow bash
+stow bash 
 stow bin -t $HOME/.local/bin
 stow emacs -t $XDG_CONFIG_HOME/emacs
 stow gdb -t $XDG_CONFIG_HOME/gdb
-stow git
-stow p10k
-stow profile
-stow tmux
+stow git -t $XDG_CONFIG_HOME/git
+stow p10k -t $XDG_CONFIG_HOME/zsh
+stow profile -t $HOME
+stow tmux -t $XDG_CONFIG_HOME/tmux
 stow vim
-stow zsh
+stow zsh -t $XDG_CONFIG_HOME/zsh
 sudo rm /usr/share/source-highlight/src-hilite-lesspipe.sh
 sudo stow source-highlight -t /usr/share/source-highlight/
