@@ -50,15 +50,17 @@ chsh -s $(which zsh)
 # stow
 # TODO updates stows for xdg and move to separate script
 stow alacritty
-stow bash 
+stow bash -t $XDG_CONFIG_HOME/bash
 stow bin -t $HOME/.local/bin
 stow emacs -t $XDG_CONFIG_HOME/emacs
 stow gdb -t $XDG_CONFIG_HOME/gdb
 stow git -t $XDG_CONFIG_HOME/git
 stow p10k -t $XDG_CONFIG_HOME/zsh
+stow python -t $XDG_CONFIG_HOME/python
 stow profile -t $HOME
 stow tmux -t $XDG_CONFIG_HOME/tmux
-stow vim
+stow npm -t $XDG_CONFIG_HOME/npm
+stow vim -t $XDG_CONFIG_HOME/vim
 stow zsh -t $XDG_CONFIG_HOME/zsh
 sudo rm /usr/share/source-highlight/src-hilite-lesspipe.sh
 sudo stow source-highlight -t /usr/share/source-highlight/

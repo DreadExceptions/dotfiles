@@ -1,10 +1,3 @@
-# rust binaries env
-export RUSTUP_HOME="/opt/rust/rustup"
-export CARGO_HOME="/opt/rust/cargo"
-
-# go environment variables
-export GOROOT="/opt/go"
-export GOPATH="${HOME}/.go"
 
 # allow syntax highlighting for less
 export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"

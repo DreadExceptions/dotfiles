@@ -6,29 +6,45 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-# clean home directory
-# thanks https://github.com/b3nj5m1n/xdg-ninja
+# /opt
 export CARGO_HOME="/opt/rust/cargo"
 export RUSTUP_HOME="/opt/rust/rustup"
+export GOROOT="/opt/go"
+
+# XDG_CONFIG_HOME (~/.config)
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME/java"
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+
+# XDG_DATA_HOME (~/.local/share)
+export GOPATH="$XDG_DATA_HOME/go"
 export ANDROID_HOME="$XDG_DATA_HOME/android" # adb will still ignore this ¯\_(ツ)_/¯
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
 export PYENV_HOME="$XDG_DATA_HOME/pyenv" # needed for mattberther/zsh-pyenv plugin
 export NODENV_ROOT="$XDG_DATA_HOME/nodenv" 
 export NODENV_HOME="$XDG_DATA_HOME/nodenv" # needed for mattberther/zsh-nodenv plugin
+
+# XDG_STATE_HOME (~/.local/state)
 export HISTFILE="$XDG_STATE_HOME/bash/history"
 export GDBHISTFILE="$XDG_STATE_HOME/gdb/history" # gef overrides this
 export NODE_REPL_HISTORY="$XDG_STATE_HOME/nodejs/node_repl_history"
 export LESSHISTFILE="$XDG_STATE_HOME/less/history"
+
+# XDG_CACHE_HOME (~/.cache)
 export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
+
+# python history hack for xdg compliance
+export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/pythonrc
+
+# viminit hack for xdg compliance
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
+    if [ -f "$XDG_CONFIG_HOME/bash/bashrc" ]; then
+	. "$XDG_CONFIG_HOME/bash/bashrc"
     fi
 fi
 
