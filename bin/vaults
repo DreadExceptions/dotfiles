@@ -17,7 +17,7 @@ if [ $# -ne 1 ]; then
 fi
 
 VAULT_NAME="$1"
-VAULT_LIST="${HOME}/dotfiles/config/.gocryptfs"
+VAULT_LIST="${XDG_STATE_HOME}/dotfiles/gocryptfs"
 VAULT_PATH=$(cat "$VAULT_LIST" | cut -d "|" -f 1 | grep --color=never "$VAULT_NAME")
 VAULT_MOUNTPOINT=$(cat "$VAULT_LIST" | cut -d "|" -f 2 | grep --color=never "$VAULT_NAME")
 

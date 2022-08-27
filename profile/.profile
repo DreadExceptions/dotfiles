@@ -6,7 +6,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-
 # /opt
 export CARGO_HOME="/opt/rust/cargo"
 export RUSTUP_HOME="/opt/rust/rustup"
@@ -43,6 +42,14 @@ export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/pythonrc
 
 # viminit hack for xdg compliance
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+
+# allow syntax highlighting for less
+export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
+export LESS=" -R "
+
+# set location variable
+export LOCATIONLONG=$(cat "$XDG_STATE_HOME/dotfiles/location" | sed '/^#/d' | cut -d "|" -f 1 | tr " " "+")
+export LOCATIONSHORT=$(cat "$XDG_STATE_HOME/dotfiles/location" | sed '/^#/d' | cut -d "|" -f 2)
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then

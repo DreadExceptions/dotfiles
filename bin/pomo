@@ -90,8 +90,8 @@ BREAKSEC=$((BREAKMIN * 60))
 BREAKMSG="Time to take a break"
 WORKMSG="Time to start working"
 ICON="${HOME}/dotfiles/icons/tomato.png"
-START_SOUND="${HOME}/dotfiles/sounds/Polite.ogg"
-END_SOUND="${HOME}/dotfiles/sounds/Information_Bell.ogg"
+START_SOUND="${XDG_DATA_HOME}/dotfiles/sounds/Polite.ogg"
+END_SOUND="${XDG_DATA_HOME}/dotfiles/sounds/Information_Bell.ogg"
 NOTIFICATION_EXPIRY_SEC=3
 
 i=0

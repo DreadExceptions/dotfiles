@@ -1,4 +1,5 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
+# TODO: this needs a complete refactor 
 
 # If not running interactively, don't do anything
 case $- in

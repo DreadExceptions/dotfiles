@@ -5,7 +5,7 @@
 # TODO:
 # - rust install probably missing a stow command (as well as after atuin install)
 # - add installation of emacs, alacritty, gocryptfs, mupdf, glow and tmux from source
-# - make sure that the xdg directories are set since I use them
+# - before running the script, make sure that the xdg directories are set since I use them
 #----------------------------------------
 
 # BE CAREFUL: CONTAINS UNTESTED CODE
@@ -40,15 +40,13 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 cargo install atuin
 
 # vim
-# TODO fix path
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+curl -fLo "$XDG_CONFIG_HOME/vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # zsh
 sudo apt install zsh
 chsh -s $(which zsh)
 
 # stow
-# TODO updates stows for xdg and move to separate script
 stow alacritty -t $XDG_CONFIG_HOME/alacritty/
 stow bash -t $XDG_CONFIG_HOME/bash
 stow bin -t $HOME/.local/bin

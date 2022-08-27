@@ -41,3 +41,6 @@ let g:netrw_winsize = 15
 
 " customize limelight
 let g:limelight_conceal_ctermfg = 'gray'
+
+" disable coc warning
+let g:coc_disable_startup_warning = 1

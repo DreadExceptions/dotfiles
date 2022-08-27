@@ -1,3 +1,4 @@
+# TODO reorganize
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -78,9 +79,12 @@ zstyle ':completion:*' menu select
 setopt autocd
 setopt autopushd
 
-# source environment variables
-if [ -f "$XDG_CONFIG_HOME/zsh/.zshenv" ]; then
-	source $XDG_CONFIG_HOME/zsh/.zshenv
+# set correct keyboard layout
+export EXTERNAL_KEYBOARD=$(xinput | grep "Cherry")
+if [ -n "$EXTERNAL_KEYBOARD" ]; then
+    setxkbmap us
+else
+    setxkbmap it
 fi
 
 # source aliases
