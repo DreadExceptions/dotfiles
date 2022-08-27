@@ -49,7 +49,7 @@ chsh -s $(which zsh)
 
 # stow
 # TODO updates stows for xdg and move to separate script
-stow alacritty
+stow alacritty -t $XDG_CONFIG_HOME/alacritty/
 stow bash -t $XDG_CONFIG_HOME/bash
 stow bin -t $HOME/.local/bin
 stow emacs -t $XDG_CONFIG_HOME/emacs

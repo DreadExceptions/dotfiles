@@ -5,11 +5,11 @@
 ;; http://xahlee.info/emacs/emacs/emacs_set_backup_into_a_directory.html
 ;; https://www.emacswiki.org/emacs/BackupDirectory
 (setq 
-  backup-directory-alist '(("" . "~/.config/emacs/backup/"))
+  backup-directory-alist '(("" . "~/.local/state/emacs/"))
   backup-by-copying t 
 )
 ;; autosaves in one place
-(setq auto-save-file-name-transforms `((".*" "~/.config/emacs/backup/", t)))
+(setq auto-save-file-name-transforms `((".*" "~/.local/state/emacs/", t)))
 
 ;; autosaves in one place
 ;; https://www.emacswiki.org/emacs/AutoSave 

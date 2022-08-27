@@ -30,7 +30,7 @@ usage() {
 	echo "    If a time is passed in the format hhmm, only today's notes taken after that time are printed" 1>&2
 }
 
-notefile="$HOME/.braindump"
+notefile="$XDG_DATA_HOME/notes/braindump"
 printnotes=0
 
 while getopts ":th" o; do

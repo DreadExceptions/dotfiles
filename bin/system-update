@@ -62,7 +62,8 @@ sudo tuxedo-tomte reconfigure all
 
 # upgrade zinit and print unused gpg keys
 printf "\n%bUpgrading zinit%b\n" "$GREEN" "$NC"
-source ${HOME}/.zshrc
+#TODO change when renameing
+source $XDG_CONFIG_HOME/zsh/.zshrc
 zini self-update
 zini update
 printf "\n%bUnused GPG keys:%b\n" "$GREEN" "$NC"
@@ -86,4 +87,4 @@ find /usr/local/src -mindepth 1 -maxdepth 1 -type d
 
 # cleaning
 printf "\n%bCleaning home cache%b\n" "$GREEN" "$NC"
-find /home/ulla/.cache/ -type f -atime +365 -delete
+find $XDG_CACHE_HOME -type f -atime +365 -delete
