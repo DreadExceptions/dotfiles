@@ -1,0 +1,24 @@
+#!/bin/bash
+#----------------------------------------
+# Author: Lorenzo Alluminio
+# conveniency wrapper for borg backup
+# TODO:
+# - add possibility to create repos 
+# - add borg prune, delete, compact if becomes too big
+# - add possibility to do a dry run (--list and --dry-run)
+# - allow for different remotes
+# - allow for mounting and unmounting backups
+# - useful link: https://borgbackup.readthedocs.io/en/stable/quickstart.html#automating-backups
+#----------------------------------------
+
+# TODO add checks on zettelkasten directory existence
+TMPDIR=$(mktemp -d)
+echo "storing filtered zettelkasten in $TMPDIR"
+FILTERED=$(grep -rL ":nobackup:" "$HOME/data/zettelkasten")
+for NOTE in "${FILTERED[@]}"; do
+	cp $NOTE $TMPDIR
+done
+
+NOW=$(date "+%Y-%m-%dT%H:%M:%S")
+sudo /opt/bin/borg create --one-file-system --stats --progress --exclude-from $XDG_DATA_HOME/dotfiles/info/backup_exclude --compression zstd "$HOME/borgbackups/localborgrepo"::$NOW /etc /opt /usr/local /home $TMPDIR
+echo "backup executed successfully"

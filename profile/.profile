@@ -48,8 +48,8 @@ export LESSOPEN="| /usr/share/source-highlight/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
 
 # set location variable
-export LOCATIONLONG=$(cat "$XDG_STATE_HOME/dotfiles/location" | sed '/^#/d' | cut -d "|" -f 1 | tr " " "+")
-export LOCATIONSHORT=$(cat "$XDG_STATE_HOME/dotfiles/location" | sed '/^#/d' | cut -d "|" -f 2)
+export LOCATIONLONG=$(cat "$XDG_DATA_HOME/dotfiles/info/location" | sed '/^#/d' | cut -d "|" -f 1 | tr " " "+")
+export LOCATIONSHORT=$(cat "$XDG_DATA_HOME/dotfiles/info/location" | sed '/^#/d' | cut -d "|" -f 2)
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then

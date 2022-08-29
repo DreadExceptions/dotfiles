@@ -62,7 +62,6 @@ sudo tuxedo-tomte reconfigure all
 
 # upgrade zinit and print unused gpg keys
 printf "\n%bUpgrading zinit%b\n" "$GREEN" "$NC"
-#TODO change when renameing
 source $XDG_CONFIG_HOME/zsh/.zshrc
 zini self-update
 zini update
