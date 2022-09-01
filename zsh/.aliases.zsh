@@ -16,10 +16,6 @@ alias ..5="cd ../../../../.."
 alias disableaslr="setarch x86_64 -R /bin/bash"
 alias objdump="objdump -M intel"
 
-# xdg aliases
-alias gdb="gdb -n -x $XDG_CONFIG_HOME/gdb/init"
-alias wget="wget --hsts-file=$XDG_STATE_HOME/wget/history"
-
 # ~/dotfiles/bin related aliases
 alias tododot="grep --color=always --exclude=.p10k.zsh -ri 'TODO' ${HOME}/dotfiles"
 alias notes="noglob $HOME/.local/bin/notes"

@@ -9,7 +9,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 # /opt
 export CARGO_HOME="/opt/rust/cargo"
 export RUSTUP_HOME="/opt/rust/rustup"
-export GOROOT="/opt/go"
 
 # XDG_CONFIG_HOME (~/.config)
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -18,13 +17,14 @@ export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
 export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config"
 
 # XDG_DATA_HOME (~/.local/share)
-export GOPATH="$XDG_DATA_HOME/go"
+export GOENV_GOPATH_PREFIX="$XDG_DATA_HOME/go"
 export ANDROID_HOME="$XDG_DATA_HOME/android" # adb will still ignore this ¯\_(ツ)_/¯
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
 export PYENV_HOME="$XDG_DATA_HOME/pyenv" # needed for mattberther/zsh-pyenv plugin
 export NODENV_ROOT="$XDG_DATA_HOME/nodenv" 
 export NODENV_HOME="$XDG_DATA_HOME/nodenv" # needed for mattberther/zsh-nodenv plugin
+export GOENV_ROOT="$XDG_DATA_HOME/goenv"
 export TEXMFHOME="$XDG_DATA_HOME/texmf"
 
 # XDG_STATE_HOME (~/.local/state)
@@ -36,6 +36,10 @@ export LESSHISTFILE="$XDG_STATE_HOME/less/history"
 # XDG_CACHE_HOME (~/.cache)
 export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
 export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
+
+# xdg aliases
+alias gdb="gdb -n -x $XDG_CONFIG_HOME/gdb/init"
+alias wget="wget --hsts-file=$XDG_STATE_HOME/wget/history"
 
 # python history hack for xdg compliance
 export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/pythonrc
@@ -55,7 +59,7 @@ export LOCATIONSHORT=$(cat "$XDG_DATA_HOME/dotfiles/info/location" | sed '/^#/d'
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$XDG_CONFIG_HOME/bash/bashrc" ]; then
-	. "$XDG_CONFIG_HOME/bash/bashrc"
+	      . "$XDG_CONFIG_HOME/bash/bashrc"
     fi
 fi
 
@@ -68,3 +72,6 @@ fi
 if [ -d "/opt/bin" ] ; then
     PATH="/opt/bin:$PATH"
 fi
+
+# include go env binary
+export PATH="$GOENV_ROOT/bin:$PATH"

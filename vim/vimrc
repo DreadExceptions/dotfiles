@@ -30,6 +30,7 @@ Plug 'aklt/plantuml-syntax'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'mzlogin/vim-markdown-toc'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 call plug#end()
 
 " customize project explorer

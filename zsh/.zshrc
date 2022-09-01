@@ -95,4 +95,9 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ${ZDOTDIR:-~}/.p10k.zsh ]] || source ${ZDOTDIR:-~}/.p10k.zsh
 
+# initializations
 eval "$(atuin init zsh)"
+eval "$(goenv init -)"
+# placed after goenv init, because it manages GOROOT and GOPATH
+export PATH="$GOROOT/bin:$PATH"
+export PATH="$PATH:$GOPATH/bin"

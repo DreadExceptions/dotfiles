@@ -6,6 +6,7 @@
 # - rust install probably missing a stow command (as well as after atuin install)
 # - add installation of emacs, alacritty, gocryptfs, mupdf, glow and tmux from source
 # - before running the script, make sure that the xdg directories are set since I use them
+# - add goenv installation
 #----------------------------------------
 
 # BE CAREFUL: CONTAINS UNTESTED CODE
