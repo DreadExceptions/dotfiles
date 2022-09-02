@@ -37,10 +37,6 @@ export LESSHISTFILE="$XDG_STATE_HOME/less/history"
 export CCACHE_DIR="$XDG_CACHE_HOME/ccache"
 export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
 
-# xdg aliases
-alias gdb="gdb -n -x $XDG_CONFIG_HOME/gdb/init"
-alias wget="wget --hsts-file=$XDG_STATE_HOME/wget/history"
-
 # python history hack for xdg compliance
 export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/pythonrc
 
@@ -66,6 +62,16 @@ fi
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
+fi
+
+# include wrappers if they exist
+if [ -d "$HOME/.local/wrappers" ] ; then
+    PATH="$HOME/.local/wrappers:$PATH"
+fi
+
+# include xdgwrappers if they exist
+if [ -d "$HOME/.local/xdgwrappers" ] ; then
+    PATH="$HOME/.local/xdgwrappers:$PATH"
 fi
 
 # include optional binaries

@@ -48,9 +48,14 @@ sudo apt install zsh
 chsh -s $(which zsh)
 
 # stow
+mkdir -p $HOME/.local/bin
+stow bin -t $HOME/.local/bin
+mkdir -p $HOME/.local/wrappers
+stow wrappers -t $HOME/.local/wrappers
+mkdir -p $HOME/.local/xdgwrappers
+stow xdgwrappers -t $HOME/.local/xdgwrappers
 stow alacritty -t $XDG_CONFIG_HOME/alacritty/
 stow bash -t $XDG_CONFIG_HOME/bash
-stow bin -t $HOME/.local/bin
 stow emacs -t $XDG_CONFIG_HOME/emacs
 stow gdb -t $XDG_CONFIG_HOME/gdb
 stow git -t $XDG_CONFIG_HOME/git
