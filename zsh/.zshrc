@@ -98,6 +98,3 @@ fi
 # initializations
 eval "$(atuin init zsh)"
 eval "$(goenv init -)"
-# placed after goenv init, because it manages GOROOT and GOPATH
-export PATH="$GOROOT/bin:$PATH"
-export PATH="$PATH:$GOPATH/bin"

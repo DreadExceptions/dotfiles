@@ -7,3 +7,8 @@
 [._]*.sw[a-p]
 [._]s[a-v][a-z]
 [._]sw[a-p]
+
+# -env files
+.go-version
+.python-version
+.node-version
