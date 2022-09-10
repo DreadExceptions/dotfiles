@@ -22,10 +22,12 @@ done
 
 NOW=$(date "+%Y-%m-%dT%H:%M:%S")
 sudo /opt/bin/borg create --one-file-system --stats --progress --exclude-from $XDG_DATA_HOME/dotfiles/info/backup_exclude --compression zstd "$HOME/borgbackups/localborgrepo"::$NOW /etc /opt /usr/local /home $TMPDIR
+# TODO check return value
 echo "backup executed successfully"
 
 # TODO use more robust check
 if [ -d /media/ulla/backup ]; then
+	# TODO check return value
 	sudo rsync -av --progress /home/ulla/borgbackups/localborgrepo /media/ulla/backup
 	echo "rsync executed successfully"
 else

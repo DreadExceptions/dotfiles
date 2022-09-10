@@ -1,2 +1,2 @@
 #!/bin/bash
-/bin/gdb -n -x "$XDG_CONFIG_HOME/gdb/init"
+/bin/gdb -n -x "$XDG_CONFIG_HOME/gdb/init" "$@"

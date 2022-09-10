@@ -1,2 +1,2 @@
 #!/bin/bash
-/bin/wget --hsts-file="$XDG_STATE_HOME/wget/history"
+/bin/wget --hsts-file="$XDG_STATE_HOME/wget/history" "$@"
