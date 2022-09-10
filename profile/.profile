@@ -80,7 +80,7 @@ if [ -d "/opt/bin" ] ; then
 fi
 
 # execute additional commands if present
-if [ -f "$XDG_DATA_HOME/dotfiles/profile/addition_profile.sh"]; then
+if [ -f "$XDG_DATA_HOME/dotfiles/profile/addition_profile.sh" ]; then
     $XDG_DATA_HOME/dotfiles/profile/addition_profile.sh
 fi
 # include go env binary
