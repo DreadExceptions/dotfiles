@@ -79,9 +79,5 @@ if [ -d "/opt/bin" ] ; then
     PATH="/opt/bin:$PATH"
 fi
 
-# execute additional commands if present
-if [ -f "$XDG_DATA_HOME/dotfiles/profile/addition_profile.sh" ]; then
-    $XDG_DATA_HOME/dotfiles/profile/addition_profile.sh
-fi
 # include go env binary
 export PATH="$GOENV_ROOT/bin:$PATH"
